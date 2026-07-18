@@ -9,7 +9,7 @@
 | A | Nền tảng URP 2D (cài package, tạo asset, gán pipeline) | ✅ Xong & đã nghiệm thu (commit `60627f7`) |
 | B | Vật liệu Lit + đèn 2D (global + point light theo map) | ✅ Xong & đã nghiệm thu (commit `d9ccc7b`) |
 | C | Post-processing: Bloom + Vignette + Color + DoF | ✅ Xong & đã nghiệm thu (commit `d6260da`) |
-| D | (Tùy chọn) Đổ bóng / normal map / camera diorama | ⏸ Chờ người dùng quyết định |
+| D | (Tùy chọn) Đổ bóng / normal map / camera diorama | 🟡 D3 đã dựng thử trên `exp/hd2d-phase-d` (commit `c43f4ee`, nghiệm thu 5/5 map, FPS 154–164) — chờ người dùng duyệt để merge; D1/D2 chưa làm |
 
 Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸ tạm dừng chờ quyết định
 
