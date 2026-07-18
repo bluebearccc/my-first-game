@@ -47,13 +47,14 @@ namespace KTG
             colorAdj.saturation.Override(6f);
             colorAdj.contrast.Override(4f);
 
-            // DoF Gaussian de rat nhe: camera ortho + sprite cung do sau (z=0, cach cam 10)
-            // → the gioi nam TRUOC gaussianStart nen van sac net; hieu ung diorama that
-            // can camera phoi canh (Phase D3, chua lam).
+            // DoF Gaussian:
+            // - Diorama (D3): camera nghieng → hang tile phia xa cach cam ~17-20, phia gan ~12-15.
+            //   Start giua dai do sau de lam mo dan phan xa man hinh = dung chat tilt-shift.
+            // - Ortho cu: moi sprite cach cam dung 10 → start 11 de the gioi truoc nguong, van sac net.
             var dof = profile.Add<DepthOfField>();
             dof.mode.Override(DepthOfFieldMode.Gaussian);
-            dof.gaussianStart.Override(11f);
-            dof.gaussianEnd.Override(30f);
+            dof.gaussianStart.Override(Hd2dView.Diorama ? 16.5f : 11f);
+            dof.gaussianEnd.Override(Hd2dView.Diorama ? 24f : 30f);
 
             volume.profile = profile;
 

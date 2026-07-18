@@ -118,6 +118,7 @@ namespace KTG
                             var csr = crystalGO.AddComponent<SpriteRenderer>();
                             csr.sprite = PixelArt.Crystal(crystalHere ? new Color(0.5f, 0.9f, 1f) : new Color(0.45f, 0.45f, 0.55f, 0.6f));
                             csr.sortingOrder = pedestal.sortingOrder + 1;
+                            Hd2dView.StandUp(crystalGO.transform);
                             crystalGO.AddComponent<Bobber>().Amplitude = 0.06f;
                             if (crystalHere)
                                 Lighting2D.AddPoint(crystalGO.transform, Vector3.zero, new Color(0.5f, 0.9f, 1f), 2.5f, 1f);
@@ -305,6 +306,7 @@ namespace KTG
             sr.sprite = sprite;
             sr.sortingOrder = Mathf.RoundToInt(-go.transform.position.y * 10f);
             Lighting2D.MakeLit(sr);
+            Hd2dView.StandUp(go.transform); // D3: prop "dung day" theo goc camera diorama
             return sr;
         }
 

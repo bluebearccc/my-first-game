@@ -37,6 +37,7 @@ namespace KTG
         public void Apply()
         {
             if (target == null || cam == null || MapBuilder.Width <= 0) return;
+            if (Hd2dView.Diorama) { ApplyDiorama(); return; }
             UpdatePixelPerfectSize();
             float vert = cam.orthographicSize;
             float horz = vert * cam.aspect;
@@ -62,6 +63,37 @@ namespace KTG
                 y += (Mathf.PerlinNoise(0.7f, Time.time * 45f) - 0.5f) * 2f * k;
             }
             transform.position = new Vector3(x, y, transform.position.z);
+        }
+
+        // Phase D3: camera phoi canh nghieng — clamp theo footprint gan dung tai mat dat,
+        // khong pixel-snap (phoi canh khong co luoi texel co dinh de bam).
+        void ApplyDiorama()
+        {
+            cam.orthographic = false;
+            cam.fieldOfView = Hd2dView.Fov;
+
+            float vert = Hd2dView.Dist * Mathf.Tan(Hd2dView.Fov * 0.5f * Mathf.Deg2Rad);
+            float horz = vert * cam.aspect;
+
+            float minX = horz, maxX = MapBuilder.Width - horz;
+            float minY = -MapBuilder.Height + vert, maxY = -vert;
+            if (minX > maxX) { float mid = (minX + maxX) * 0.5f; minX = maxX = mid; }
+            if (minY > maxY) { float mid = (minY + maxY) * 0.5f; minY = maxY = mid; }
+
+            float x = Mathf.Clamp(target.position.x, minX, maxX);
+            float y = Mathf.Clamp(target.position.y, minY, maxY);
+
+            if (shakeTime > 0f)
+            {
+                shakeTime -= Time.deltaTime;
+                float k = shakeAmp * Mathf.Clamp01(shakeTime / shakeDur);
+                x += (Mathf.PerlinNoise(Time.time * 45f, 0.3f) - 0.5f) * 2f * k;
+                y += (Mathf.PerlinNoise(0.7f, Time.time * 45f) - 0.5f) * 2f * k;
+            }
+
+            var focus = new Vector3(x, y, 0f);
+            transform.rotation = Hd2dView.Rot;
+            transform.position = focus - Hd2dView.Rot * Vector3.forward * Hd2dView.Dist;
         }
     }
 
