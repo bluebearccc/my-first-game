@@ -14,6 +14,8 @@ namespace KTG.EditorTools
     {
         public static void Run()
         {
+            // Tat throttle cua Editor khi cua so khong focus de so FPS dang tin
+            EditorPrefs.SetInt("InteractionMode", 1); // 1 = No Throttling
             EditorApplication.isPlaying = true;
         }
 
@@ -58,6 +60,11 @@ namespace KTG.EditorTools
             // Bao ve save cua nguoi choi: sao luu truoc, khoi phuc khi xong
             hadSave = PlayerPrefs.HasKey(SaveKey);
             savedData = hadSave ? PlayerPrefs.GetString(SaveKey) : null;
+
+            // Do FPS khong bi gioi han boi vsync/nen
+            Application.runInBackground = true;
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = -1;
 
             StartCoroutine(Drive());
         }

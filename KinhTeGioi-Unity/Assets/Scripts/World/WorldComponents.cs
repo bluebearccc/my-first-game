@@ -218,23 +218,32 @@ namespace KTG
         }
     }
 
-    // Nhap nhay quang duoc (glow child sprite) bang Perlin noise.
+    // Nhap nhay quang duoc (glow child sprite + Light2D that) bang Perlin noise.
     public class TorchFlicker : MonoBehaviour
     {
         public SpriteRenderer Glow;
+        public UnityEngine.Rendering.Universal.Light2D Light; // Phase B: den that nhap nhay cung glow
         float seed;
+        float lightBase = -1f;
 
         void Awake() { seed = Random.Range(0f, 100f); }
 
         void Update()
         {
-            if (Glow == null) return;
             float n = Mathf.PerlinNoise(Time.time * 6f + seed, 0f);
-            var c = Glow.color;
-            c.a = 0.55f + n * 0.35f;
-            Glow.color = c;
-            float s = 0.9f + n * 0.25f;
-            Glow.transform.localScale = new Vector3(s, s, 1f);
+            if (Glow != null)
+            {
+                var c = Glow.color;
+                c.a = 0.55f + n * 0.35f;
+                Glow.color = c;
+                float s = 0.9f + n * 0.25f;
+                Glow.transform.localScale = new Vector3(s, s, 1f);
+            }
+            if (Light != null)
+            {
+                if (lightBase < 0f) lightBase = Light.intensity;
+                Light.intensity = lightBase * (0.8f + n * 0.4f);
+            }
         }
     }
 

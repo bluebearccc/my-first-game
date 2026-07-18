@@ -24,6 +24,7 @@ namespace KTG
             bodyT = bodyGO.transform;
             body = bodyGO.AddComponent<SpriteRenderer>();
             body.sprite = PixelArt.Character(Hair, Skin, Shirt, Pants);
+            Lighting2D.MakeLit(body); // nguoi choi nhan anh sang 2D nhu the gioi (Phase B)
 
             var shadowGO = new GameObject("Shadow");
             shadowGO.transform.SetParent(transform, false);

@@ -101,7 +101,10 @@ namespace KTG
                             var glowSr = glowGO.AddComponent<SpriteRenderer>();
                             glowSr.sprite = PixelArt.Glow(flame, 64);
                             glowSr.sortingOrder = torch.sortingOrder - 1;
-                            torch.gameObject.AddComponent<TorchFlicker>().Glow = glowSr;
+                            var torchFlicker = torch.gameObject.AddComponent<TorchFlicker>();
+                            torchFlicker.Glow = glowSr;
+                            // Vung sang am quanh duoc — nhap nhay cung glow (Phase B)
+                            torchFlicker.Light = Lighting2D.AddPoint(torch.transform, new Vector3(0f, 0.9f, 0f), flame, 3f, 1.1f);
                             walkable = false;
                             break;
                         }
@@ -116,6 +119,8 @@ namespace KTG
                             csr.sprite = PixelArt.Crystal(crystalHere ? new Color(0.5f, 0.9f, 1f) : new Color(0.45f, 0.45f, 0.55f, 0.6f));
                             csr.sortingOrder = pedestal.sortingOrder + 1;
                             crystalGO.AddComponent<Bobber>().Amplitude = 0.06f;
+                            if (crystalHere)
+                                Lighting2D.AddPoint(crystalGO.transform, Vector3.zero, new Color(0.5f, 0.9f, 1f), 2.5f, 1f);
                             Interactables[cell] = new InteractableInfo(InteractableKind.Pedestal, '*');
                             walkable = false;
                             break;
@@ -127,9 +132,13 @@ namespace KTG
                             break;
 
                         case 'o':
-                            SpawnProp(root, pos, PixelArt.Coral(new Color(0.6f, 0.3f, 0.8f), x * 7 + y * 11));
+                        {
+                            var coral = SpawnProp(root, pos, PixelArt.Coral(new Color(0.6f, 0.3f, 0.8f), x * 7 + y * 11));
+                            // Nam huyen ao phat sang nhe (Phase B)
+                            Lighting2D.AddPoint(coral.transform, new Vector3(0f, 0.4f, 0f), new Color(0.7f, 0.45f, 0.95f), 1.5f, 0.5f);
                             walkable = false;
                             break;
+                        }
 
                         case 'b':
                             SpawnProp(root, pos, PixelArt.Barrel());
@@ -165,7 +174,9 @@ namespace KTG
                         {
                             // Nha rong 3 o, cao 2 o: chan them cac o xung quanh o neo
                             var roofC = Color.Lerp(map.Ground, new Color(0.72f, 0.28f, 0.22f), 0.65f);
-                            SpawnProp(root, pos, PixelArt.House(new Color(0.87f, 0.80f, 0.64f), roofC));
+                            var house = SpawnProp(root, pos, PixelArt.House(new Color(0.87f, 0.80f, 0.64f), roofC));
+                            // Cua so nha hat anh sang vang am nho (Phase B)
+                            Lighting2D.AddPoint(house.transform, new Vector3(0f, 0.7f, 0f), new Color(1f, 0.85f, 0.5f), 1.8f, 0.7f);
                             walkable = false;
                             extraBlocked.Add(new Vector2Int(x - 1, y));
                             extraBlocked.Add(new Vector2Int(x + 1, y));
@@ -197,7 +208,9 @@ namespace KTG
                             var glowSr = glowGO.AddComponent<SpriteRenderer>();
                             glowSr.sprite = PixelArt.Glow(new Color(0.5f, 0.9f, 1f, 0.45f), 64);
                             glowSr.sortingOrder = spark.sortingOrder - 1;
-                            spark.gameObject.AddComponent<TorchFlicker>().Glow = glowSr;
+                            var sparkFlicker = spark.gameObject.AddComponent<TorchFlicker>();
+                            sparkFlicker.Glow = glowSr;
+                            sparkFlicker.Light = Lighting2D.AddPoint(spark.transform, new Vector3(0f, 0.35f, 0f), new Color(0.5f, 0.9f, 1f), 2f, 0.7f);
                             Interactables[cell] = new InteractableInfo(InteractableKind.Lore, 'L');
                             walkable = false;
                             break;
@@ -219,14 +232,20 @@ namespace KTG
                         }
 
                         case '<':
+                        {
                             Interactables[cell] = new InteractableInfo(InteractableKind.PortalBack, '<');
-                            SpawnTile(root, pos, PixelArt.Glow(new Color(0.9f, 0.8f, 0.3f, 0.55f), 48), -8000);
+                            var pg = SpawnTile(root, pos, PixelArt.Glow(new Color(0.9f, 0.8f, 0.3f, 0.55f), 48), -8000, lit: false);
+                            Lighting2D.AddPoint(pg.transform, Vector3.zero, new Color(0.9f, 0.8f, 0.3f), 2f, 0.9f);
                             break;
+                        }
 
                         case '>':
+                        {
                             Interactables[cell] = new InteractableInfo(InteractableKind.PortalForward, '>');
-                            SpawnTile(root, pos, PixelArt.Glow(new Color(0.3f, 0.85f, 0.9f, 0.55f), 48), -8000);
+                            var pg = SpawnTile(root, pos, PixelArt.Glow(new Color(0.3f, 0.85f, 0.9f, 0.55f), 48), -8000, lit: false);
+                            Lighting2D.AddPoint(pg.transform, Vector3.zero, new Color(0.3f, 0.85f, 0.9f), 2f, 0.9f);
                             break;
+                        }
 
                         case 'P':
                             SpawnCell = cell;
@@ -254,13 +273,17 @@ namespace KTG
                 if (c.x >= 0 && c.x < Width && c.y >= 0 && c.y < Height)
                     Blocked[c.x, c.y] = true;
 
+            // Anh sang nen toan map (Phase B HD-2D) — mau/cuong do rieng tung vung
+            Lighting2D.AddGlobal(root, mapIndex);
+
             // Hieu ung moi truong (la bay / buom / dom dom) — con cua root, tu huy khi doi map
             var fxGO = new GameObject("AmbientFX");
             fxGO.transform.SetParent(root, false);
             fxGO.AddComponent<AmbientFX>().MapIndex = mapIndex;
         }
 
-        static SpriteRenderer SpawnTile(Transform root, Vector3 pos, Sprite sprite, int order)
+        // lit=false cho sprite tu phat sang (glow portal...) — giu unlit de khong bi ambient lam toi.
+        static SpriteRenderer SpawnTile(Transform root, Vector3 pos, Sprite sprite, int order, bool lit = true)
         {
             var go = new GameObject("tile");
             go.transform.SetParent(root, false);
@@ -268,6 +291,7 @@ namespace KTG
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.sortingOrder = order;
+            if (lit) Lighting2D.MakeLit(sr);
             return sr;
         }
 
@@ -280,6 +304,7 @@ namespace KTG
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.sortingOrder = Mathf.RoundToInt(-go.transform.position.y * 10f);
+            Lighting2D.MakeLit(sr);
             return sr;
         }
 

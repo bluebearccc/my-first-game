@@ -298,6 +298,33 @@ namespace KTG
             }
         }
 
+        // Per-map ambient light — Phase B HD-2D (dùng bởi Lighting2D.AddGlobal):
+        // market ấm sáng · guild trung tính ám khói · bank lạnh xám-lam ·
+        // valley tím huyền ảo tối · palace lạnh trang nghiêm
+        public static Color MapAmbientColor(int mapIndex)
+        {
+            switch (mapIndex)
+            {
+                case 0: return new Color(1f, 0.96f, 0.88f);
+                case 1: return new Color(0.93f, 0.90f, 0.85f);
+                case 2: return new Color(0.80f, 0.86f, 1f);
+                case 3: return new Color(0.62f, 0.55f, 0.85f);
+                default: return new Color(0.78f, 0.82f, 1f);
+            }
+        }
+
+        public static float MapAmbientIntensity(int mapIndex)
+        {
+            switch (mapIndex)
+            {
+                case 0: return 1.0f;
+                case 1: return 0.9f;
+                case 2: return 0.85f;
+                case 3: return 0.7f;
+                default: return 0.78f;
+            }
+        }
+
         // ================================================================ DIALOGUE
         static readonly Dictionary<string, DialogueDef> MainDialogues = new Dictionary<string, DialogueDef>();
         static readonly Dictionary<string, DialogueDef> FlavorDialogues = new Dictionary<string, DialogueDef>();
