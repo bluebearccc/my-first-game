@@ -6,10 +6,10 @@
 
 | Phase | Mô tả | Trạng thái |
 |-------|-------|-----------|
-| A | Nền tảng URP 2D (cài package, tạo asset, gán pipeline) | 🟡 Đang làm |
-| B | Vật liệu Lit + đèn 2D (global + point light theo map) | ⬜ Chưa bắt đầu |
-| C | Post-processing: Bloom + Vignette + Color + DoF | ⬜ Chưa bắt đầu |
-| D | (Tùy chọn) Đổ bóng / normal map / camera diorama | ⬜ Chưa quyết định |
+| A | Nền tảng URP 2D (cài package, tạo asset, gán pipeline) | ✅ Xong & đã nghiệm thu (commit `60627f7`) |
+| B | Vật liệu Lit + đèn 2D (global + point light theo map) | ✅ Xong & đã nghiệm thu (commit `d9ccc7b`) |
+| C | Post-processing: Bloom + Vignette + Color + DoF | ✅ Xong & đã nghiệm thu (commit `d6260da`) |
+| D | (Tùy chọn) Đổ bóng / normal map / camera diorama | ⏸ Chờ người dùng quyết định |
 
 Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸ tạm dừng chờ quyết định
 
@@ -17,13 +17,39 @@ Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸
 
 - [x] Đã tạo branch `feature/hd2d-urp` (2026-07-18)
 - [x] Đã sao lưu `GraphicsSettings.asset` + `QualitySettings.asset` vào scratchpad (2026-07-18)
-- [ ] Đã có bộ ảnh "before" của 5 map
+- [x] Đã có bộ ảnh "before" của 5 map (chụp trên `main`, lưu scratchpad `shots/before/`)
 
 ---
 
 ## Log
 
-### 2026-07-18 · Phase A · Cài URP + tạo asset + gán pipeline (xong phần code, CHỜ nghiệm thu)
+### 2026-07-18 · Phase B + C · Đèn 2D + post-processing (XONG, đã nghiệm thu 5/5 map)
+
+**Phase B (commit `d9ccc7b`):**
+- `Lighting2D` (mới): material Sprite-Lit chia sẻ + tạo Global/Point Light2D bằng code.
+- `GameContent`: `MapAmbientColor/Intensity` cạnh `TorchColor` — 5 tông riêng (chợ ấm sáng,
+  guild trung tính, bank lạnh lam, valley tím tối, palace lạnh trang nghiêm).
+- `MapBuilder`: tile/prop/NPC nhận đèn; glow + portal giữ unlit; point light cho đuốc (nhấp nháy
+  qua `TorchFlicker.Light`), crystal đã thu thập, cửa sổ nhà, portal, nấm valley, sparkle.
+- `PlayerController`: player nhận đèn. Impact đã chạy: SpawnProp/SpawnTile HIGH (thay đổi thuần
+  cộng thêm, nghiệm thu đủ 5 map để bù rủi ro), còn lại LOW.
+
+**Phase C (commit `d6260da`):**
+- `Bootstrap`: Volume + profile dựng bằng code — Bloom (0.85, threshold 0.85), Vignette 0.28,
+  Tonemapping Neutral, ColorAdjustments (sat +6, contrast +4), DoF Gaussian start 11
+  (thế giới ở depth 10 → vẫn sắc nét; DoF "thật" cần Phase D3). `renderPostProcessing = true`.
+- `UIManager.BuildHud`: đã gỡ Image vignette cũ — hết nguy cơ chồng 2 lớp vignette.
+
+**Nghiệm thu (harness tự động `HD2DTestRunner`, Play thật qua 5 map):**
+- before (main): ~163 FPS · after-A: hình y hệt, không hồng/mất tile · after-B: 5 tông sáng
+  rõ rệt, đuốc có vũng sáng nhấp nháy · after-C: bloom rực glow/đom đóm, UI sắc nét.
+- FPS after-C: 142–165 trên cả 5 map (chuẩn ≥60 ĐẠT). Lần đo 15 FPS ở after-A là artifact
+  throttle của Editor khi mất focus — đã vá harness (InteractionMode No Throttling).
+- Ảnh before/after: scratchpad `shots/{before,after-A,after-B,after-C}/map0..4.png`.
+
+**Còn lại:** Phase D chờ quyết định của người dùng (không tự làm theo rule D).
+
+### 2026-07-18 · Phase A · Cài URP + tạo asset + gán pipeline (XONG — nghiệm thu đạt, xem mục trên)
 
 **Đã làm:**
 - Tạo branch `feature/hd2d-urp`; sao lưu `GraphicsSettings.asset` + `QualitySettings.asset` (scratchpad).
