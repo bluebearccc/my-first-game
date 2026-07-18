@@ -87,9 +87,12 @@ namespace KTG
                     switch (ch)
                     {
                         case 'T':
-                            SpawnProp(root, pos, PixelArt.Tree(new Color(0.25f, 0.5f, 0.25f), new Color(0.4f, 0.28f, 0.18f)));
+                        {
+                            var tree = SpawnProp(root, pos, PixelArt.Tree(new Color(0.25f, 0.5f, 0.25f), new Color(0.4f, 0.28f, 0.18f)));
+                            Shadow2D.AddCaster(tree.gameObject, 0.9f, 0.4f);
                             walkable = false;
                             break;
+                        }
 
                         case 't':
                         {
@@ -103,8 +106,9 @@ namespace KTG
                             glowSr.sortingOrder = torch.sortingOrder - 1;
                             var torchFlicker = torch.gameObject.AddComponent<TorchFlicker>();
                             torchFlicker.Glow = glowSr;
-                            // Vung sang am quanh duoc — nhap nhay cung glow (Phase B)
-                            torchFlicker.Light = Lighting2D.AddPoint(torch.transform, new Vector3(0f, 0.9f, 0f), flame, 3f, 1.1f);
+                            // Vung sang am quanh duoc — nhap nhay cung glow (Phase B); Phase D1: co bong dong
+                            torchFlicker.Light = Lighting2D.AddPoint(torch.transform, new Vector3(0f, 0.9f, 0f), flame, 3f, 1.1f, castShadows: true);
+                            Shadow2D.AddCaster(torch.gameObject, 0.3f, 0.2f);
                             walkable = false;
                             break;
                         }
@@ -121,16 +125,19 @@ namespace KTG
                             Hd2dView.StandUp(crystalGO.transform);
                             crystalGO.AddComponent<Bobber>().Amplitude = 0.06f;
                             if (crystalHere)
-                                Lighting2D.AddPoint(crystalGO.transform, Vector3.zero, new Color(0.5f, 0.9f, 1f), 2.5f, 1f);
+                                Lighting2D.AddPoint(crystalGO.transform, Vector3.zero, new Color(0.5f, 0.9f, 1f), 2.5f, 1f, castShadows: true);
                             Interactables[cell] = new InteractableInfo(InteractableKind.Pedestal, '*');
                             walkable = false;
                             break;
                         }
 
                         case 's':
-                            SpawnProp(root, pos, PixelArt.Stall(new Color(0.7f, 0.3f, 0.25f)));
+                        {
+                            var stall = SpawnProp(root, pos, PixelArt.Stall(new Color(0.7f, 0.3f, 0.25f)));
+                            Shadow2D.AddCaster(stall.gameObject, 1f, 0.4f);
                             walkable = false;
                             break;
+                        }
 
                         case 'o':
                         {
@@ -142,19 +149,28 @@ namespace KTG
                         }
 
                         case 'b':
-                            SpawnProp(root, pos, PixelArt.Barrel());
+                        {
+                            var barrel = SpawnProp(root, pos, PixelArt.Barrel());
+                            Shadow2D.AddCaster(barrel.gameObject, 0.5f, 0.3f);
                             walkable = false;
                             break;
+                        }
 
                         case 'c':
-                            SpawnProp(root, pos, PixelArt.Crate());
+                        {
+                            var crate = SpawnProp(root, pos, PixelArt.Crate());
+                            Shadow2D.AddCaster(crate.gameObject, 0.6f, 0.3f);
                             walkable = false;
                             break;
+                        }
 
                         case 'r':
-                            SpawnProp(root, pos, PixelArt.Rock(x * 5 + y * 13));
+                        {
+                            var rock = SpawnProp(root, pos, PixelArt.Rock(x * 5 + y * 13));
+                            Shadow2D.AddCaster(rock.gameObject, 0.6f, 0.3f);
                             walkable = false;
                             break;
+                        }
 
                         case 'u':
                             SpawnProp(root, pos, PixelArt.Bush(Color.Lerp(map.Grass, new Color(0.2f, 0.5f, 0.25f), 0.5f), x * 3 + y * 19));
@@ -162,22 +178,29 @@ namespace KTG
                             break;
 
                         case 'w':
-                            SpawnProp(root, pos, PixelArt.Well());
+                        {
+                            var well = SpawnProp(root, pos, PixelArt.Well());
+                            Shadow2D.AddCaster(well.gameObject, 0.8f, 0.4f);
                             walkable = false;
                             break;
+                        }
 
                         case 'n':
-                            SpawnProp(root, pos, PixelArt.Sign());
+                        {
+                            var sign = SpawnProp(root, pos, PixelArt.Sign());
+                            Shadow2D.AddCaster(sign.gameObject, 0.3f, 0.2f);
                             walkable = false;
                             break;
+                        }
 
                         case 'H':
                         {
                             // Nha rong 3 o, cao 2 o: chan them cac o xung quanh o neo
                             var roofC = Color.Lerp(map.Ground, new Color(0.72f, 0.28f, 0.22f), 0.65f);
                             var house = SpawnProp(root, pos, PixelArt.House(new Color(0.87f, 0.80f, 0.64f), roofC));
-                            // Cua so nha hat anh sang vang am nho (Phase B)
+                            // Cua so nha hat anh sang vang am nho (Phase B) — den trang tri, KHONG bat shadow (D1)
                             Lighting2D.AddPoint(house.transform, new Vector3(0f, 0.7f, 0f), new Color(1f, 0.85f, 0.5f), 1.8f, 0.7f);
+                            Shadow2D.AddCaster(house.gameObject, 2.6f, 0.6f);
                             walkable = false;
                             extraBlocked.Add(new Vector2Int(x - 1, y));
                             extraBlocked.Add(new Vector2Int(x + 1, y));
@@ -188,9 +211,12 @@ namespace KTG
                         }
 
                         case 'F':
-                            SpawnProp(root, pos, PixelArt.Fence());
+                        {
+                            var fence = SpawnProp(root, pos, PixelArt.Fence());
+                            Shadow2D.AddCaster(fence.gameObject, 1f, 0.15f);
                             walkable = false;
                             break;
+                        }
 
                         case 'k':
                         case 'd':
@@ -211,7 +237,7 @@ namespace KTG
                             glowSr.sortingOrder = spark.sortingOrder - 1;
                             var sparkFlicker = spark.gameObject.AddComponent<TorchFlicker>();
                             sparkFlicker.Glow = glowSr;
-                            sparkFlicker.Light = Lighting2D.AddPoint(spark.transform, new Vector3(0f, 0.35f, 0f), new Color(0.5f, 0.9f, 1f), 2f, 0.7f);
+                            sparkFlicker.Light = Lighting2D.AddPoint(spark.transform, new Vector3(0f, 0.35f, 0f), new Color(0.5f, 0.9f, 1f), 2f, 0.7f, castShadows: true);
                             Interactables[cell] = new InteractableInfo(InteractableKind.Lore, 'L');
                             walkable = false;
                             break;
@@ -222,6 +248,7 @@ namespace KTG
                             var boss = SpawnProp(root, pos, PixelArt.Character(new Color(0.15f, 0.1f, 0.15f), new Color(0.85f, 0.7f, 0.6f), new Color(0.5f, 0.15f, 0.55f), new Color(0.25f, 0.1f, 0.3f)));
                             boss.transform.localScale = Vector3.one * 1.6f;
                             SpawnShadowAt(root, boss.transform.position, boss.sortingOrder);
+                            Shadow2D.AddCaster(boss.gameObject, 0.5f, 0.25f);
                             var bossIdle = boss.gameObject.AddComponent<NpcIdle>();
                             bossIdle.Hair = new Color(0.15f, 0.1f, 0.15f);
                             bossIdle.Skin = new Color(0.85f, 0.7f, 0.6f);
@@ -257,6 +284,7 @@ namespace KTG
                             {
                                 var body = SpawnProp(root, pos, PixelArt.Character(npc.Hair, npc.Skin, npc.Shirt, new Color(0.3f, 0.28f, 0.35f)));
                                 SpawnShadowAt(root, body.transform.position, body.sortingOrder);
+                                Shadow2D.AddCaster(body.gameObject, 0.4f, 0.25f);
                                 var idle = body.gameObject.AddComponent<NpcIdle>();
                                 idle.Hair = npc.Hair; idle.Skin = npc.Skin; idle.Shirt = npc.Shirt;
                                 Interactables[cell] = new InteractableInfo(InteractableKind.Npc, ch);

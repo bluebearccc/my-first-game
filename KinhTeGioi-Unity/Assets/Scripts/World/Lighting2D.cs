@@ -36,7 +36,9 @@ namespace KTG
         }
 
         // Diem sang cho nguon sang cu the (duoc, crystal, cua so nha, portal...).
-        public static Light2D AddPoint(Transform parent, Vector3 localPos, Color color, float radius, float intensity)
+        // castShadows: Phase D1 — chi bat cho nguon sang chinh (duoc/sparkle/crystal),
+        // KHONG bat cho den trang tri (cua so nha, portal, nam) de tiet kiem hieu nang.
+        public static Light2D AddPoint(Transform parent, Vector3 localPos, Color color, float radius, float intensity, bool castShadows = false)
         {
             var go = new GameObject("Light2D");
             go.transform.SetParent(parent, false);
@@ -48,6 +50,11 @@ namespace KTG
             l.pointLightInnerRadius = radius * 0.25f;
             l.pointLightOuterRadius = radius;
             l.falloffIntensity = 0.6f;
+            if (Shadow2D.Enabled && castShadows)
+            {
+                l.shadowsEnabled = true;
+                l.shadowIntensity = 0.75f;
+            }
             return l;
         }
     }

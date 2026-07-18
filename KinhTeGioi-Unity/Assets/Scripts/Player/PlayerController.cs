@@ -26,6 +26,7 @@ namespace KTG
             body.sprite = PixelArt.Character(Hair, Skin, Shirt, Pants);
             Lighting2D.MakeLit(body); // nguoi choi nhan anh sang 2D nhu the gioi (Phase B)
             Hd2dView.StandUp(bodyT);  // D3: nhan vat "dung day" trong goc nhin diorama
+            Shadow2D.AddCaster(bodyGO, 0.45f, 0.25f); // Phase D1: bong do dong duoi chan player
 
             var shadowGO = new GameObject("Shadow");
             shadowGO.transform.SetParent(transform, false);
