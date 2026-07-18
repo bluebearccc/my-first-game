@@ -16,6 +16,7 @@ và (tùy chọn) **camera phối cảnh nghiêng kiểu diorama**.
 | [`01-hd2d-urp-migration-plan.md`](01-hd2d-urp-migration-plan.md) | Kế hoạch chi tiết theo từng phase, file bị ảnh hưởng, tiêu chí nghiệm thu, rollback |
 | [`02-ai-rules.md`](02-ai-rules.md) | **Rule bắt buộc cho mọi AI** làm việc trong workspace này khi thực thi kế hoạch |
 | [`03-progress.md`](03-progress.md) | Nhật ký tiến độ — AI cập nhật sau mỗi phase |
+| [`04-phase-d1-shadows-plan.md`](04-phase-d1-shadows-plan.md) | Kế hoạch Phase D1 (bóng đổ động) trên nền D3 diorama |
 
 ## Nguyên tắc cốt lõi (đọc trước khi làm bất cứ gì)
 
