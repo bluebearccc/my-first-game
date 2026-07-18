@@ -172,10 +172,8 @@ namespace KTG
             rt.SetParent(canvas.transform, false);
             UIFactory.Stretch(rt);
 
-            // Vignette lam toi nhe 4 goc man hinh, tao chieu sau cho canh choi
-            var vig = UIFactory.CreateImage(rt, "Vignette", PixelArt.Vignette(), new Vector2(1280, 720));
-            UIFactory.Stretch(vig.rectTransform);
-            vig.raycastTarget = false;
+            // Vignette gio do URP Volume dam nhiem (Phase C) — Image PixelArt.Vignette cu da go
+            // vi canvas overlay render sau post, hai lop vignette se chong nhau.
 
             var objPanel = UIFactory.CreatePanel(rt, "ObjectivePanel", new Vector2(520, 56), PanelFill, PanelBorder);
             UIFactory.SetAnchor(objPanel.rectTransform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(20, -20));
