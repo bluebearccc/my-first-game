@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace KTG
 {
@@ -18,6 +19,8 @@ namespace KTG
             cam.backgroundColor = new Color(0.04f, 0.05f, 0.09f);
             cam.clearFlags = CameraClearFlags.SolidColor;
             camGO.tag = "MainCamera";
+            // Camera tao bang code nen them tuong minh camera data cua URP (Phase A ke hoach HD-2D)
+            camGO.AddComponent<UniversalAdditionalCameraData>();
             camGO.AddComponent<AudioListener>();
             var camFollow = camGO.AddComponent<CameraFollow>();
 
