@@ -23,6 +23,27 @@ Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸
 
 ## Log
 
+### 2026-07-19 · UI sharpness (Hướng A) · Tinh chỉnh legacy UI cho chữ nét hơn (XONG, nghiệm thu 5/5 map)
+
+**Vấn đề:** người dùng thấy UI chưa nét. Nguyên nhân ở cấu hình Canvas, không phải nội dung panel.
+
+**Đã làm:**
+- Impact `UIFactory.CreateCanvas` = **LOW** (chỉ `UIManager.Build` gọi); `UIFactory.CreateText` = **CRITICAL**
+  (17 caller) → thiết kế né hoàn toàn, KHÔNG đụng `CreateText`.
+- `UIFactory.CreateCanvas`: thêm `scaler.dynamicPixelsPerUnit = 2f` — tăng gấp đôi độ phân giải raster
+  của glyph `Text` và hình 9-slice `Wood9`. Đây là toàn bộ thay đổi (1 dòng), procedural, không asset ngoài.
+- Giữ nguyên `pixelPerfect`, `referenceResolution`, `matchWidthOrHeight`.
+
+**Nghiệm thu (harness `HD2DTestRunner`, Play thật, before/after cùng điều kiện):**
+- Chụp before/after main menu + 5 map. So sánh zoom 4×: chữ tiêu đề 56pt, HUD objective và dòng help
+  chữ nhỏ đều **viền sắc gọn hơn, ít quầng nhòe**; dấu tiếng Việt đủ, không cắt chữ.
+- Sprite thế giới vẫn pixel-perfect (dPU chỉ ảnh hưởng canvas UI, không đụng camera thế giới → rule A3 an toàn).
+- 5 map render đúng tông, không hồng/mất tile; bloom còn. FPS after 161–165 (≥60 ĐẠT).
+- Ảnh: scratchpad `shots/{ui-before,ui-after}/{menu,map0..4}.png` + `cmp_*` (không commit vào repo).
+
+**Còn lại:** nếu người dùng thấy vẫn chưa đủ nét ở màn hình phân giải cao → cân nhắc Hướng B
+(TextMeshPro/SDF), cần xin phép cài package theo ranh giới D.
+
 ### 2026-07-18 · Phase B + C · Đèn 2D + post-processing (XONG, đã nghiệm thu 5/5 map)
 
 **Phase B (commit `d9ccc7b`):**
