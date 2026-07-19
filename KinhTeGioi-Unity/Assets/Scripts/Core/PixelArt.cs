@@ -724,63 +724,200 @@ namespace KTG
             });
         }
 
-        // Con ga 12x12, 2 frame (0 = ngang dau, 1 = cui xuong mo thoc), pivot day
+        // Con ga 16x16, 4 frame (0=ngang dau, 1=trung gian, 2=cui mo thoc, 3=vo canh), pivot day
         public static Sprite Chicken(int frame)
         {
             return Cached("chick" + frame, () =>
             {
-                var t = NewTex(12, 12);
-                var body = new Color32(240, 238, 228, 255);
-                var bodyD = new Color32(200, 196, 182, 255);
-                var comb = new Color32(214, 60, 56, 255);
-                var beak = new Color32(230, 160, 60, 255);
+                var t = NewTex(16, 16);
+                var body = new Color32(245, 242, 230, 255);
+                var bodyD = new Color32(205, 200, 185, 255);
+                var bodyL = new Color32(255, 253, 245, 255);
+                var comb = new Color32(216, 62, 58, 255);
+                var wattle = new Color32(200, 55, 60, 255);
+                var beak = new Color32(232, 162, 60, 255);
                 var eye = new Color32(30, 26, 34, 255);
+                var wing = new Color32(224, 218, 200, 255);
+                var wingD = new Color32(196, 190, 172, 255);
+
                 // than
-                Rect(t, 2, 4, 7, 5, body);
-                Rect(t, 2, 7, 7, 2, bodyD);
-                Rect(t, 1, 4, 1, 3, bodyD); // duoi
-                if (frame == 0)
+                Rect(t, 3, 7, 9, 7, body);
+                Rect(t, 3, 12, 9, 2, bodyD);
+                Rect(t, 3, 7, 9, 1, bodyL);
+                Rect(t, 1, 7, 3, 4, bodyD); // duoi xoe
+
+                // canh: gap sat than binh thuong, xoe len khi vo canh (frame 3)
+                if (frame == 3)
                 {
-                    Rect(t, 8, 2, 3, 4, body);   // dau ngang
-                    P(t, 9, 1, comb);
-                    P(t, 11, 3, beak);
-                    P(t, 9, 3, eye);
+                    Rect(t, 4, 4, 6, 4, wing);
+                    Rect(t, 4, 4, 6, 1, wingD);
                 }
                 else
                 {
-                    Rect(t, 8, 5, 3, 4, body);   // dau cui xuong
-                    P(t, 9, 4, comb);
-                    P(t, 11, 8, beak);
-                    P(t, 9, 6, eye);
+                    Rect(t, 4, 8, 6, 5, wing);
+                    Rect(t, 4, 12, 6, 1, wingD);
                 }
+
+                int hy = frame == 2 ? 3 : (frame == 1 ? 1 : 0); // dau cui xuong dan khi mo thoc
+                // dau
+                Rect(t, 10, 3 + hy, 4, 4, body);
+                P(t, 11, 2 + hy, comb); P(t, 12, 2 + hy, comb); P(t, 11, 1 + hy, comb);
+                P(t, 10, 5 + hy, wattle);
+                Rect(t, 13, 4 + hy, 2, 1, beak);
+                P(t, 11, 4 + hy, eye);
+
                 // chan
-                Rect(t, 3, 9, 1, 3, beak); Rect(t, 6, 9, 1, 3, beak);
+                Rect(t, 5, 14, 1, 2, beak); Rect(t, 8, 14, 1, 2, beak);
+                OutlineTex(t, new Color(0.1f, 0.08f, 0.09f));
                 return Make(t, 16, new Vector2(0.5f, 0f));
             });
         }
 
-        // Con cho 16x12, 2 frame (duoi vay len/xuong), pivot day
+        // Con cho 20x14, 4 frame (chu ky chay trot + vay duoi), pivot day
         public static Sprite Dog(int frame)
         {
             return Cached("dog" + frame, () =>
             {
-                var t = NewTex(16, 12);
-                var fur = new Color32(158, 116, 74, 255);
-                var furD = new Color32(118, 84, 52, 255);
+                var t = NewTex(20, 14);
+                var fur = new Color32(162, 120, 76, 255);
+                var furD = new Color32(120, 86, 54, 255);
+                var furL = new Color32(188, 148, 100, 255);
                 var eye = new Color32(30, 26, 34, 255);
+
                 // than
-                Rect(t, 3, 4, 8, 5, fur);
-                Rect(t, 3, 7, 8, 2, furD);
-                // dau
-                Rect(t, 10, 2, 5, 5, fur);
-                Rect(t, 10, 1, 2, 2, furD);  // tai
-                P(t, 13, 3, eye);
-                Rect(t, 14, 5, 2, 2, furD);  // mom
-                // duoi (vay theo frame)
-                if (frame == 0) { Rect(t, 1, 2, 2, 3, fur); }
-                else { Rect(t, 1, 5, 2, 3, fur); }
-                // chan
-                Rect(t, 4, 9, 2, 3, furD); Rect(t, 9, 9, 2, 3, furD);
+                Rect(t, 4, 4, 11, 6, fur);
+                Rect(t, 4, 8, 11, 2, furD);
+                Rect(t, 4, 4, 11, 1, furL);
+
+                // dau + tai cup + mom
+                Rect(t, 13, 1, 6, 6, fur);
+                Rect(t, 13, 0, 2, 2, furD); Rect(t, 16, 0, 2, 2, furD);
+                P(t, 16, 3, eye);
+                Rect(t, 18, 4, 2, 2, furD);
+
+                // duoi vay len/xuong xen ke theo frame
+                if (frame == 0 || frame == 2) Rect(t, 1, 2, 3, 4, fur);
+                else Rect(t, 1, 5, 3, 4, fur);
+
+                // 4 chan, chu ky chay: chan cheo nhau nang len xen ke
+                bool a = frame % 2 == 0;
+                Rect(t, 5, 10, 2, a ? 4 : 3, furD);
+                Rect(t, 9, 10, 2, a ? 3 : 4, furD);
+                Rect(t, 12, 10, 2, a ? 3 : 4, furD);
+                Rect(t, 15, 10, 2, a ? 4 : 3, furD);
+
+                OutlineTex(t, new Color(0.08f, 0.06f, 0.07f));
+                return Make(t, 16, new Vector2(0.5f, 0f));
+            });
+        }
+
+        // Bo 20x16, 2 frame (nhai co: dau nhun nhe), pivot day
+        public static Sprite Cow(int frame)
+        {
+            return Cached("cow" + frame, () =>
+            {
+                var t = NewTex(20, 16);
+                var body = new Color32(240, 236, 226, 255);
+                var patch = new Color32(60, 52, 50, 255);
+                var bodyD = new Color32(210, 204, 192, 255);
+                var horn = new Color32(220, 210, 190, 255);
+                var eye = new Color32(30, 26, 34, 255);
+                var nose = new Color32(80, 60, 60, 255);
+
+                Rect(t, 3, 6, 12, 7, body);
+                Rect(t, 3, 11, 12, 2, bodyD);
+                Rect(t, 5, 6, 4, 3, patch); Rect(t, 10, 9, 4, 3, patch);
+                Rect(t, 1, 5, 3, 5, bodyD); // duoi
+
+                int hy = frame == 1 ? 1 : 0;
+                Rect(t, 14, 4 + hy, 5, 5, body);
+                Rect(t, 13, 3 + hy, 2, 1, horn); Rect(t, 18, 3 + hy, 2, 1, horn);
+                Rect(t, 17, 6 + hy, 2, 2, nose);
+                P(t, 16, 5 + hy, eye);
+
+                Rect(t, 4, 13, 2, 3, patch); Rect(t, 8, 13, 2, 3, patch);
+                Rect(t, 12, 13, 2, 3, patch);
+                OutlineTex(t, new Color(0.1f, 0.09f, 0.09f));
+                return Make(t, 16, new Vector2(0.5f, 0f));
+            });
+        }
+
+        // Cuu 16x14, 2 frame (dau nhun nhe khi gam co), long xu bong, pivot day
+        public static Sprite Sheep(int frame)
+        {
+            return Cached("sheep" + frame, () =>
+            {
+                var t = NewTex(16, 14);
+                var wool = new Color32(238, 234, 224, 255);
+                var woolD = new Color32(212, 206, 192, 255);
+                var head = new Color32(60, 52, 50, 255);
+                var eye = new Color32(230, 225, 210, 255);
+
+                for (int y = 3; y < 11; y++)
+                    for (int x = 2; x < 12; x++)
+                    {
+                        float dx = (x - 6.5f) / 5f, dy = (y - 6.5f) / 4f;
+                        if (dx * dx + dy * dy <= 1f) P(t, x, y, y > 7 ? woolD : wool);
+                    }
+
+                int hy = frame == 1 ? 1 : 0;
+                Rect(t, 11, 4 + hy, 4, 4, head);
+                P(t, 14, 5 + hy, eye);
+
+                Rect(t, 3, 11, 2, 2, head); Rect(t, 8, 11, 2, 2, head);
+                OutlineTex(t, new Color(0.1f, 0.09f, 0.09f));
+                return Make(t, 16, new Vector2(0.5f, 0f));
+            });
+        }
+
+        // Lon 16x12, 2 frame (dau nhun nhe), duoi xoan, pivot day
+        public static Sprite Pig(int frame)
+        {
+            return Cached("pig" + frame, () =>
+            {
+                var t = NewTex(16, 12);
+                var body = new Color32(240, 176, 186, 255);
+                var bodyD = new Color32(214, 148, 158, 255);
+                var snout = new Color32(224, 140, 150, 255);
+                var eye = new Color32(40, 30, 32, 255);
+
+                Rect(t, 3, 4, 9, 6, body);
+                Rect(t, 3, 8, 9, 2, bodyD);
+                P(t, 2, 4, bodyD); P(t, 2, 5, bodyD); P(t, 2, 3, bodyD); // duoi xoan
+
+                int hy = frame == 1 ? 1 : 0;
+                Rect(t, 10, 4 + hy, 4, 4, body);
+                Rect(t, 12, 6 + hy, 2, 2, snout);
+                P(t, 11, 5 + hy, eye);
+                Rect(t, 9, 3 + hy, 1, 1, bodyD); Rect(t, 11, 3 + hy, 1, 1, bodyD); // tai
+
+                Rect(t, 4, 10, 2, 2, bodyD); Rect(t, 8, 10, 2, 2, bodyD);
+                OutlineTex(t, new Color(0.1f, 0.06f, 0.07f));
+                return Make(t, 16, new Vector2(0.5f, 0f));
+            });
+        }
+
+        // Meo 12x10, 2 frame (ngoi cuon minh, duoi ve nhe), pivot day
+        public static Sprite Cat(int frame)
+        {
+            return Cached("cat" + frame, () =>
+            {
+                var t = NewTex(12, 10);
+                var fur = new Color32(90, 88, 96, 255);
+                var furD = new Color32(64, 62, 70, 255);
+                var eye = new Color32(210, 200, 90, 255);
+
+                Rect(t, 2, 3, 6, 5, fur);
+                Rect(t, 2, 6, 6, 2, furD);
+                Rect(t, 2, 1, 4, 3, fur);
+                P(t, 2, 0, fur); P(t, 5, 0, fur); // tai
+                P(t, 4, 3, eye);
+
+                if (frame == 0) Rect(t, 7, 4, 3, 1, furD);
+                else Rect(t, 7, 2, 2, 3, furD);
+
+                Rect(t, 3, 8, 1, 1, furD); Rect(t, 6, 8, 1, 1, furD);
+                OutlineTex(t, new Color(0.06f, 0.06f, 0.07f));
                 return Make(t, 16, new Vector2(0.5f, 0f));
             });
         }

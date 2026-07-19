@@ -10,6 +10,7 @@
 | B | Vật liệu Lit + đèn 2D (global + point light theo map) | ✅ Xong & đã nghiệm thu (commit `d9ccc7b`) |
 | C | Post-processing: Bloom + Vignette + Color + DoF | ✅ Xong & đã nghiệm thu (commit `d6260da`) |
 | D | (Tùy chọn) Đổ bóng / normal map / camera diorama | 🟡 D3 đã dựng thử trên `exp/hd2d-phase-d` (commit `c43f4ee`, nghiệm thu 5/5 map, FPS 154–164) — chờ người dùng duyệt để merge; D1/D2 chưa làm |
+| NPC/đồng ruộng/con vật (kế hoạch `04-npc-dongruong-convat-plan.md`) | Nhóm A (con vật) ✅ xong & nghiệm thu; Nhóm B/C ⬜ chưa làm |
 
 Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸ tạm dừng chờ quyết định
 
@@ -22,6 +23,32 @@ Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸
 ---
 
 ## Log
+
+### 2026-07-19 · Nhóm A (kế hoạch `04-npc-dongruong-convat-plan.md`) · Con vật nét hơn + thêm loài (XONG, nghiệm thu 5/5 map)
+
+**Đã làm:**
+- Impact trước khi sửa: `PixelArt.Chicken`/`PixelArt.Dog` = **HIGH** (gọi xuyên `MapBuilder.Build`/`AnimalWander.Update`,
+  lan tới `ContinueGame`/`GoToMapRoutine`) — đã báo người dùng, người dùng xác nhận tiếp tục theo đúng
+  mitigation đã dùng ở Phase B (nghiệm thu đủ 5 map). `AnimalWander` (class) = LOW. Không đụng `PixelArt.Make`.
+- `PixelArt.Chicken`: 12×12 → **16×16**, thêm mào 3px, wattle, cánh lớp riêng, viền `OutlineTex`,
+  4 frame (ngẩng/trung gian/cúi mổ/vỗ cánh).
+- `PixelArt.Dog`: 16×12 → **20×14**, 4 chân tách rõ (chu kỳ trot), tai cụp, mõm, viền `OutlineTex`,
+  4 frame (trot cycle + vẫy đuôi).
+- Thêm `PixelArt.Cow/Sheep/Pig/Cat` (2 frame mỗi loài, pivot đáy, `OutlineTex`).
+- `AnimalWander` (`WorldComponents.cs`): đổi `Kind` từ `int` cứng sang `enum AnimalKind` + bảng cấu hình
+  `Cfg{frames, frameDur, speed, pauseMin/Max, radius, spriteFn}` dùng chung cho 6 loài.
+- `MapBuilder.Build`: gộp case `k/d/m/e/g/y` dùng chung 1 khối spawn (switch chọn sprite/kind).
+- `GameContent.cs`: rải thêm 4 con vật mới (`m/e/g/y`) vào map0 (market) và map1 (guild) để nghiệm thu
+  thực tế — thuần trang trí, không đụng `Flow`/`Objectives`.
+
+**Nghiệm thu (Unity 2022.3.62f3, Play thật qua harness `HD2DTestRunner`, `-hd2dLabel groupA-after`):**
+- Biên dịch sạch (chỉ 2 warning cũ có sẵn, không liên quan thay đổi).
+- `gitnexus_detect_changes()`: chỉ chạm đúng 3 file dự kiến (`PixelArt.cs`, `MapBuilder.cs`, `WorldComponents.cs`).
+- 5/5 map render đúng, không hồng/lủng tile: map0=161.3fps, map1=155.5fps, map2=164.1fps,
+  map3=153.4fps, map4=154.8fps (chuẩn ≥60 ĐẠT).
+- Ảnh: scratchpad `shots/groupA-after/map0..4.png` + `summary.txt` (không commit vào repo).
+
+**Còn lại:** Nhóm B (đồng ruộng) và Nhóm C (NPC/animation phụ) của kế hoạch `04-...` chưa làm.
 
 ### 2026-07-19 · UI sharpness (Hướng A) · Tinh chỉnh legacy UI cho chữ nét hơn (XONG, nghiệm thu 5/5 map)
 

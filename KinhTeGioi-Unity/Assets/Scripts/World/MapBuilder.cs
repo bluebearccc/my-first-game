@@ -220,9 +220,23 @@ namespace KTG
 
                         case 'k':
                         case 'd':
+                        case 'm':
+                        case 'e':
+                        case 'g':
+                        case 'y':
                         {
-                            var animal = SpawnProp(root, pos, ch == 'k' ? PixelArt.Chicken(0) : PixelArt.Dog(0));
-                            animal.gameObject.AddComponent<AnimalWander>().Kind = ch == 'k' ? 0 : 1;
+                            Sprite animalSpr; AnimalKind animalKind;
+                            switch (ch)
+                            {
+                                case 'k': animalSpr = PixelArt.Chicken(0); animalKind = AnimalKind.Chicken; break;
+                                case 'd': animalSpr = PixelArt.Dog(0); animalKind = AnimalKind.Dog; break;
+                                case 'm': animalSpr = PixelArt.Cow(0); animalKind = AnimalKind.Cow; break;
+                                case 'e': animalSpr = PixelArt.Sheep(0); animalKind = AnimalKind.Sheep; break;
+                                case 'g': animalSpr = PixelArt.Pig(0); animalKind = AnimalKind.Pig; break;
+                                default:  animalSpr = PixelArt.Cat(0); animalKind = AnimalKind.Cat; break;
+                            }
+                            var animal = SpawnProp(root, pos, animalSpr);
+                            animal.gameObject.AddComponent<AnimalWander>().Kind = animalKind;
                             break; // o van di duoc — con vat tu tranh duong
                         }
 

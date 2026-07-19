@@ -337,15 +337,37 @@ namespace KTG
         }
     }
 
+    public enum AnimalKind { Chicken, Dog, Cow, Sheep, Pig, Cat }
+
     // Con vat di lang thang ngau nhien trong pham vi nho, ton trong o bi chan.
-    // Kind: 0 = ga (cham, mo thoc), 1 = cho (nhanh, vay duoi)
+    // Moi loai co bang cau hinh rieng (frame, toc do, thoi gian dung...) de de mo rong.
     public class AnimalWander : MonoBehaviour
     {
-        public int Kind;
+        public AnimalKind Kind;
+
+        struct Cfg
+        {
+            public int frames;
+            public float frameDur;
+            public float speed;
+            public float pauseMin, pauseMax;
+            public int radius;
+            public System.Func<int, Sprite> sprite;
+        }
+
+        static readonly Dictionary<AnimalKind, Cfg> cfgs = new Dictionary<AnimalKind, Cfg>
+        {
+            { AnimalKind.Chicken, new Cfg { frames = 4, frameDur = 0.35f, speed = 0.7f, pauseMin = 0.6f, pauseMax = 2.8f, radius = 2, sprite = PixelArt.Chicken } },
+            { AnimalKind.Dog,     new Cfg { frames = 4, frameDur = 0.16f, speed = 1.4f, pauseMin = 0.4f, pauseMax = 2.0f, radius = 3, sprite = PixelArt.Dog } },
+            { AnimalKind.Cow,     new Cfg { frames = 2, frameDur = 0.6f,  speed = 0.4f, pauseMin = 1.5f, pauseMax = 4.0f, radius = 2, sprite = PixelArt.Cow } },
+            { AnimalKind.Sheep,   new Cfg { frames = 2, frameDur = 0.6f,  speed = 0.45f,pauseMin = 1.2f, pauseMax = 3.5f, radius = 2, sprite = PixelArt.Sheep } },
+            { AnimalKind.Pig,     new Cfg { frames = 2, frameDur = 0.5f,  speed = 0.6f, pauseMin = 1.0f, pauseMax = 3.0f, radius = 2, sprite = PixelArt.Pig } },
+            { AnimalKind.Cat,     new Cfg { frames = 2, frameDur = 0.9f,  speed = 0.8f, pauseMin = 1.8f, pauseMax = 4.5f, radius = 2, sprite = PixelArt.Cat } },
+        };
 
         SpriteRenderer sr;
+        Cfg cfg;
         Vector3 target;
-        float speed;
         float frameT;
         int frame;
         float pauseT;
@@ -353,20 +375,19 @@ namespace KTG
         void Awake()
         {
             sr = GetComponent<SpriteRenderer>();
+            cfg = cfgs[Kind];
             target = transform.position;
-            speed = Kind == 0 ? 0.7f : 1.3f;
             pauseT = Random.Range(0f, 2f);
         }
 
         void Update()
         {
-            // animation 2 frame
             frameT += Time.deltaTime;
-            if (frameT > (Kind == 0 ? 0.45f : 0.3f))
+            if (frameT > cfg.frameDur)
             {
                 frameT = 0f;
-                frame = 1 - frame;
-                sr.sprite = Kind == 0 ? PixelArt.Chicken(frame) : PixelArt.Dog(frame);
+                frame = (frame + 1) % cfg.frames;
+                sr.sprite = cfg.sprite(frame);
             }
 
             if (pauseT > 0f) { pauseT -= Time.deltaTime; return; }
@@ -374,11 +395,11 @@ namespace KTG
             Vector3 d = target - transform.position;
             if (d.magnitude < 0.06f)
             {
-                pauseT = Random.Range(0.6f, 2.8f);
+                pauseT = Random.Range(cfg.pauseMin, cfg.pauseMax);
                 var c = MapBuilder.WorldToCell(transform.position + new Vector3(0f, 0.3f, 0f));
                 for (int i = 0; i < 8; i++)
                 {
-                    var nc = c + new Vector2Int(Random.Range(-2, 3), Random.Range(-2, 3));
+                    var nc = c + new Vector2Int(Random.Range(-cfg.radius, cfg.radius + 1), Random.Range(-cfg.radius, cfg.radius + 1));
                     if (nc != c && MapBuilder.IsWalkable(nc))
                     {
                         target = MapBuilder.CellToWorld(nc) - new Vector3(0f, 0.5f, 0f);
@@ -388,7 +409,7 @@ namespace KTG
             }
             else
             {
-                transform.position += d.normalized * speed * Time.deltaTime;
+                transform.position += d.normalized * cfg.speed * Time.deltaTime;
                 if (Mathf.Abs(d.x) > 0.05f) sr.flipX = d.x < 0f;
                 sr.sortingOrder = Mathf.RoundToInt(-transform.position.y * 10f);
             }

@@ -46,6 +46,7 @@ namespace KTG
             g.Set(10, 2, 'u'); g.Set(16, 2, 'u'); g.Set(26, 7, 'n');
             // dong vat trong cho
             g.Set(10, 6, 'k'); g.Set(16, 6, 'k'); g.Set(13, 9, 'd');
+            g.Set(5, 5, 'm'); g.Set(23, 5, 'e'); g.Set(7, 12, 'g'); g.Set(19, 12, 'y');
             // cau chuyen an giau o goc cho
             g.Set(2, 14, 'L');
             // be da, spawn, cong
@@ -104,6 +105,7 @@ namespace KTG
             g.Set(12, 2, 'u'); g.Set(15, 2, 'u'); g.Set(26, 7, 'n');
             // dong vat thi tran
             g.Set(11, 8, 'k'); g.Set(16, 9, 'd');
+            g.Set(17, 3, 'm'); g.Set(10, 6, 'e'); g.Set(24, 9, 'g'); g.Set(5, 11, 'y');
             // cau chuyen an
             g.Set(25, 14, 'L');
             g.Set(13, 12, '*');
