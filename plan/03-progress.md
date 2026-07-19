@@ -10,7 +10,7 @@
 | B | Vật liệu Lit + đèn 2D (global + point light theo map) | ✅ Xong & đã nghiệm thu (commit `d9ccc7b`) |
 | C | Post-processing: Bloom + Vignette + Color + DoF | ✅ Xong & đã nghiệm thu (commit `d6260da`) |
 | D | (Tùy chọn) Đổ bóng / normal map / camera diorama | 🟡 D3 đã dựng thử trên `exp/hd2d-phase-d` (commit `c43f4ee`, nghiệm thu 5/5 map, FPS 154–164) — chờ người dùng duyệt để merge; D1/D2 chưa làm |
-| NPC/đồng ruộng/con vật (kế hoạch `04-npc-dongruong-convat-plan.md`) | Nhóm A ✅, Nhóm B (đồng ruộng) ✅ xong & nghiệm thu; Nhóm C ⬜ chưa làm |
+| NPC/đồng ruộng/con vật (kế hoạch `04-npc-dongruong-convat-plan.md`) | Nhóm A ✅, Nhóm B ✅, Nhóm C (NPC) ✅ — cả 3 nhóm xong & đã nghiệm thu |
 
 Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸ tạm dừng chờ quyết định
 
@@ -23,6 +23,38 @@ Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸
 ---
 
 ## Log
+
+### 2026-07-19 · Nhóm C (kế hoạch `04-npc-dongruong-convat-plan.md`) · Dân làng đi lại + NPC flavor (XONG, nghiệm thu 5/5 map)
+
+**Đã làm:**
+- `WorldComponents.cs`: thêm `VillagerWander` (component mới, không có caller cũ nên không cần impact
+  chặn) — dùng `PixelArt.Character` có sẵn, frame 1/2 khi đi, frame 0/3 (thở) khi dừng, quay mặt theo
+  hướng di chuyển, tái dùng logic tìm-ô-trống của `AnimalWander` với bán kính rộng hơn (3 ô).
+- `MapBuilder.Build`: thêm `case 'V'` — spawn `Character` (màu tóc/da/áo random theo bảng palette,
+  seed theo ô để ổn định qua các lần build) + `VillagerWander` + shadow; **KHÔNG** thêm vào
+  `Interactables` (không thoại), ô vẫn đi được.
+- NPC flavor (`D`) — **không cần sửa `MapBuilder`**: nhánh `default` (xử lý `map.Npcs`) đã tổng quát
+  sẵn từ trước, chỉ cần thêm dữ liệu ở `GameContent.cs`.
+- `GameContent.cs`: thêm `m.Npcs['D']` + `FlavorDialogues[Key(mapIndex,'D')]` (1-2 câu tán gẫu tiếng
+  Việt) cho map0-3 (market/guild/bank/valley); rải 1 `V` (dân làng) + 1 `D` (NPC flavor) mỗi map ở ô
+  cỏ trống. **Bỏ qua map4 (palace)** — phòng ngai vàng là khu vực boss/trang nghiêm, dân làng/tán gẫu
+  không hợp bối cảnh (quyết định phạm vi, không đụng `Flow`/`Objectives`).
+  Xác nhận `D` không nằm trong bất kỳ `Flow` nào → `GetDialogue` luôn rơi về `FlavorDialogues`, không
+  bao giờ kích hoạt `MainDialogues`/puzzle/crystal.
+
+**Nghiệm thu (Unity 2022.3.62f3, Play thật qua harness `HD2DTestRunner`, `-hd2dLabel groupC-after`):**
+- Biên dịch sạch. `gitnexus_detect_changes()`: đúng 3 file dự kiến (`GameContent.cs`, `MapBuilder.cs`,
+  `WorldComponents.cs`) — `PixelArt.cs` không đổi (tái dùng `Character` có sẵn).
+- 5/5 map render đúng, không hồng/lủng tile: map0=162.7fps, map1=164.0fps, map2=164.8fps,
+  map3=163.4fps, map4=165.2fps (chuẩn ≥60 ĐẠT).
+- Quan sát ảnh: xuất hiện thêm dân làng đi lại + NPC flavor ở map0/1/2/3 so với ảnh nghiệm thu Nhóm
+  A/B trước đó, không kẹt/không đè hình.
+- Ảnh: scratchpad `shots/groupC-after/map0..4.png` + `summary.txt` (không commit vào repo).
+
+**Còn lại:** chưa bấm nói chuyện tay với NPC `D` để nghe thoại thực tế (logic `GetDialogue` đã xác
+minh qua code, rủi ro thấp vì `D` không có trong `Flow`). Animation phụ tuỳ chọn (chớp mắt `NpcIdle`,
+`FarmerChore`, khói bếp `Chimney`) trong mục 3 của Nhóm C **chưa làm** — đánh giá là đủ với thời lượng
+hiện tại, có thể làm thêm nếu người dùng muốn.
 
 ### 2026-07-19 · Nhóm B (kế hoạch `04-npc-dongruong-convat-plan.md`) · Đồng ruộng trang trí (XONG, nghiệm thu 5/5 map)
 

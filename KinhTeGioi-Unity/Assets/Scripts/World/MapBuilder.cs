@@ -269,6 +269,25 @@ namespace KTG
                             break; // o van di duoc — con vat tu tranh duong
                         }
 
+                        case 'V':
+                        {
+                            int vh = (x * 92821 ^ y * 68917 ^ mapIndex * 51137) & 0x7fffffff;
+                            var vr = new System.Random(vh);
+                            Color[] hairs = { new Color(0.15f, 0.1f, 0.08f), new Color(0.5f, 0.35f, 0.2f), new Color(0.75f, 0.68f, 0.55f), new Color(0.35f, 0.22f, 0.15f), new Color(0.6f, 0.55f, 0.5f) };
+                            Color[] skins = { new Color(0.85f, 0.65f, 0.5f), new Color(0.75f, 0.55f, 0.4f), new Color(0.9f, 0.72f, 0.58f) };
+                            Color[] shirts = { new Color(0.3f, 0.5f, 0.3f), new Color(0.5f, 0.25f, 0.2f), new Color(0.25f, 0.3f, 0.5f), new Color(0.55f, 0.45f, 0.2f), new Color(0.4f, 0.2f, 0.4f) };
+                            var vHair = hairs[vr.Next(hairs.Length)];
+                            var vSkin = skins[vr.Next(skins.Length)];
+                            var vShirt = shirts[vr.Next(shirts.Length)];
+                            var villager = SpawnProp(root, pos, PixelArt.Character(vHair, vSkin, vShirt, new Color(0.3f, 0.28f, 0.35f)));
+                            SpawnShadowAt(root, villager.transform.position, villager.sortingOrder);
+                            Shadow2D.AddCaster(villager.gameObject, 0.4f, 0.25f);
+                            var vw = villager.gameObject.AddComponent<VillagerWander>();
+                            vw.Hair = vHair; vw.Skin = vSkin; vw.Shirt = vShirt;
+                            // KHONG them Interactables — dan lang trang tri, khong thoai; o van di duoc
+                            break;
+                        }
+
                         case 'L':
                         {
                             var spark = SpawnProp(root, pos, PixelArt.Sparkle());

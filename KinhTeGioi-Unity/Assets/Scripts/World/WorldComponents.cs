@@ -339,6 +339,73 @@ namespace KTG
 
     public enum AnimalKind { Chicken, Dog, Cow, Sheep, Pig, Cat }
 
+    // Dan lang di lang thang trang tri (khong tuong tac/khong thoai): buoc frame 1/2 khi di,
+    // tho nhe frame 0/3 khi dung, quay mat theo huong di chuyen. Tai su dung logic tim o trong
+    // giong AnimalWander nhung ban kinh rong hon (dan lang di dao pho).
+    public class VillagerWander : MonoBehaviour
+    {
+        public Color Hair, Skin, Shirt;
+        public Color Pants = new Color(0.3f, 0.28f, 0.35f);
+
+        SpriteRenderer sr;
+        Vector3 target;
+        const float Speed = 0.9f;
+        const int Radius = 3;
+        float pauseT;
+        float walkFrameT;
+        int walkFrame;
+        int facing;
+        bool flip;
+        float breathePhase;
+
+        void Awake()
+        {
+            sr = GetComponent<SpriteRenderer>();
+            target = transform.position;
+            pauseT = Random.Range(0f, 2f);
+            breathePhase = Random.Range(0f, 4f);
+        }
+
+        void Update()
+        {
+            Vector3 d = target - transform.position;
+            bool moving = pauseT <= 0f && d.magnitude >= 0.06f;
+
+            walkFrameT += Time.deltaTime;
+            if (walkFrameT > 0.28f) { walkFrameT = 0f; walkFrame = 1 - walkFrame; }
+
+            if (pauseT > 0f)
+            {
+                pauseT -= Time.deltaTime;
+            }
+            else if (d.magnitude < 0.06f)
+            {
+                pauseT = Random.Range(1.5f, 4f);
+                var c = MapBuilder.WorldToCell(transform.position + new Vector3(0f, 0.3f, 0f));
+                for (int i = 0; i < 8; i++)
+                {
+                    var nc = c + new Vector2Int(Random.Range(-Radius, Radius + 1), Random.Range(-Radius, Radius + 1));
+                    if (nc != c && MapBuilder.IsWalkable(nc))
+                    {
+                        target = MapBuilder.CellToWorld(nc) - new Vector3(0f, 0.5f, 0f);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                facing = Mathf.Abs(d.x) > Mathf.Abs(d.y) ? 2 : (d.y > 0f ? 1 : 0);
+                if (facing == 2) flip = d.x < 0f;
+                transform.position += d.normalized * Speed * Time.deltaTime;
+                sr.sortingOrder = Mathf.RoundToInt(-transform.position.y * 10f);
+            }
+
+            int frame = moving ? (1 + walkFrame) : (((Time.time + breathePhase) % 2.4f) > 1.2f ? 3 : 0);
+            sr.sprite = PixelArt.Character(Hair, Skin, Shirt, Pants, moving ? facing : 0, frame);
+            sr.flipX = moving && facing == 2 && flip;
+        }
+    }
+
     // Con vat di lang thang ngau nhien trong pham vi nho, ton trong o bi chan.
     // Moi loai co bang cau hinh rieng (frame, toc do, thoi gian dung...) de de mo rong.
     public class AnimalWander : MonoBehaviour

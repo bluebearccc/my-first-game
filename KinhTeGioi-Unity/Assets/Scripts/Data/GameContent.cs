@@ -52,6 +52,8 @@ namespace KTG
             g.Set(4, 11, 'j');
             g.Set(22, 12, '='); g.Set(23, 12, 'i'); g.Set(24, 12, '=');
             g.Set(23, 11, 'h');
+            // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
+            g.Set(17, 7, 'V'); g.Set(20, 4, 'D');
             // cau chuyen an giau o goc cho
             g.Set(2, 14, 'L');
             // be da, spawn, cong
@@ -81,6 +83,7 @@ namespace KTG
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Trưởng Chợ", Hair = new Color(0.5f, 0.35f, 0.2f), Skin = new Color(0.85f, 0.65f, 0.5f), Shirt = new Color(0.7f, 0.45f, 0.15f) };
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Dì Ba", Hair = new Color(0.15f, 0.1f, 0.1f), Skin = new Color(0.9f, 0.7f, 0.55f), Shirt = new Color(0.3f, 0.6f, 0.35f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Ông Muối Trắng", Hair = new Color(0.85f, 0.85f, 0.85f), Skin = new Color(0.8f, 0.62f, 0.5f), Shirt = new Color(0.85f, 0.85f, 0.95f) };
+            m.Npcs['D'] = new NpcDef { Code = 'D', Name = "Cậu Bé Bán Bánh", Hair = new Color(0.2f, 0.14f, 0.1f), Skin = new Color(0.87f, 0.68f, 0.53f), Shirt = new Color(0.75f, 0.55f, 0.2f) };
             return m;
         }
 
@@ -114,6 +117,8 @@ namespace KTG
             // dong ruong trang tri canh hang rao truoc nha
             g.Set(2, 5, '='); g.Set(3, 5, 'i'); g.Set(2, 6, 'j');
             g.Set(25, 5, '='); g.Set(25, 6, 'h');
+            // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
+            g.Set(16, 4, 'V'); g.Set(8, 10, 'D');
             // cau chuyen an
             g.Set(25, 14, 'L');
             g.Set(13, 12, '*');
@@ -142,6 +147,7 @@ namespace KTG
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Lina", Hair = new Color(0.6f, 0.3f, 0.15f), Skin = new Color(0.88f, 0.68f, 0.53f), Shirt = new Color(0.5f, 0.2f, 0.25f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Vance", Hair = new Color(0.1f, 0.1f, 0.12f), Skin = new Color(0.82f, 0.6f, 0.48f), Shirt = new Color(0.15f, 0.25f, 0.45f) };
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Chủ Quán Rowan", Hair = new Color(0.4f, 0.4f, 0.4f), Skin = new Color(0.86f, 0.66f, 0.5f), Shirt = new Color(0.4f, 0.3f, 0.2f) };
+            m.Npcs['D'] = new NpcDef { Code = 'D', Name = "Thợ Rèn Trẻ", Hair = new Color(0.3f, 0.22f, 0.15f), Skin = new Color(0.8f, 0.58f, 0.44f), Shirt = new Color(0.3f, 0.3f, 0.32f) };
             return m;
         }
 
@@ -171,6 +177,8 @@ namespace KTG
             g.Set(26, 7, 'n');
             // cho canh gac ngan hang
             g.Set(16, 9, 'd');
+            // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
+            g.Set(10, 4, 'V'); g.Set(20, 9, 'D');
             // cau chuyen an
             g.Set(2, 14, 'L');
             g.Set(13, 12, '*');
@@ -199,6 +207,7 @@ namespace KTG
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Aurel", Hair = new Color(0.2f, 0.2f, 0.22f), Skin = new Color(0.8f, 0.6f, 0.48f), Shirt = new Color(0.15f, 0.35f, 0.15f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Sable", Hair = new Color(0.3f, 0.15f, 0.05f), Skin = new Color(0.6f, 0.42f, 0.3f), Shirt = new Color(0.5f, 0.35f, 0.1f) };
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Piu", Hair = new Color(0.15f, 0.15f, 0.15f), Skin = new Color(0.85f, 0.65f, 0.52f), Shirt = new Color(0.3f, 0.3f, 0.35f) };
+            m.Npcs['D'] = new NpcDef { Code = 'D', Name = "Nhân Viên Quầy", Hair = new Color(0.25f, 0.2f, 0.18f), Skin = new Color(0.78f, 0.58f, 0.46f), Shirt = new Color(0.2f, 0.25f, 0.35f) };
             return m;
         }
 
@@ -220,6 +229,8 @@ namespace KTG
             g.Set(10, 12, 'u'); g.Set(16, 12, 'u'); g.Set(2, 5, 'u'); g.Set(25, 5, 'u');
             // hang rao do nat cua khu dinh cu cu
             g.Set(6, 6, 'F'); g.Set(7, 6, 'F'); g.Set(20, 6, 'F'); g.Set(21, 6, 'F');
+            // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
+            g.Set(9, 9, 'V'); g.Set(18, 9, 'D');
             // cau chuyen an giau sau Nha Hien Triet
             g.Set(13, 2, 'L');
             g.Set(13, 12, '*');
@@ -248,6 +259,7 @@ namespace KTG
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Nhà Hiền Triết Mù", Hair = new Color(0.9f, 0.9f, 0.9f), Skin = new Color(0.75f, 0.58f, 0.48f), Shirt = new Color(0.6f, 0.5f, 0.7f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Mira", Hair = new Color(0.5f, 0.2f, 0.5f), Skin = new Color(0.85f, 0.68f, 0.6f), Shirt = new Color(0.4f, 0.2f, 0.5f) };
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Talos", Hair = new Color(0.25f, 0.2f, 0.3f), Skin = new Color(0.7f, 0.55f, 0.5f), Shirt = new Color(0.3f, 0.25f, 0.45f) };
+            m.Npcs['D'] = new NpcDef { Code = 'D', Name = "Lữ Khách Lạc Lối", Hair = new Color(0.4f, 0.35f, 0.45f), Skin = new Color(0.72f, 0.56f, 0.52f), Shirt = new Color(0.35f, 0.3f, 0.5f) };
             return m;
         }
 
@@ -430,6 +442,14 @@ namespace KTG
             {
                 Lines = new List<DialogueLine> { new DialogueLine("B", "Muối trắng tinh khiết đây, không đâu bán được đâu.") }
             };
+            FlavorDialogues[Key(0, 'D')] = new DialogueDef
+            {
+                Lines = new List<DialogueLine>
+                {
+                    new DialogueLine("D", "Bánh nóng đây, bánh nóng đây! Cô chú mua giùm con vài cái đi ạ."),
+                    new DialogueLine("D", "Chợ hôm nay đông vui thật, con thích nhất là lúc trời vừa hửng sáng.")
+                }
+            };
         }
 
         static void BuildMap1Dialogues()
@@ -497,6 +517,14 @@ namespace KTG
             FlavorDialogues[Key(1, 'C')] = new DialogueDef
             {
                 Lines = new List<DialogueLine> { new DialogueLine("C", "Quán trọ vẫn còn phòng trống nếu cháu cần nghỉ chân.") }
+            };
+            FlavorDialogues[Key(1, 'D')] = new DialogueDef
+            {
+                Lines = new List<DialogueLine>
+                {
+                    new DialogueLine("D", "Ta đang tập rèn một lưỡi rìu mới, còn vụng lắm."),
+                    new DialogueLine("D", "Thị trấn này dạo này nhộn nhịp hẳn lên nhờ Liên Minh Dệt.")
+                }
             };
         }
 
@@ -573,6 +601,14 @@ namespace KTG
             {
                 Lines = new List<DialogueLine> { new DialogueLine("C", "Ta còn phải ghi chép thêm nhiều sổ sách nữa.") }
             };
+            FlavorDialogues[Key(2, 'D')] = new DialogueDef
+            {
+                Lines = new List<DialogueLine>
+                {
+                    new DialogueLine("D", "Xin chào, quý khách cần đổi tiền hay gửi tiết kiệm ạ?"),
+                    new DialogueLine("D", "Ngân Thành lúc nào cũng đông đúc, ta ít khi được nghỉ tay.")
+                }
+            };
         }
 
         static void BuildMap3Dialogues()
@@ -636,6 +672,14 @@ namespace KTG
             FlavorDialogues[Key(3, 'C')] = new DialogueDef
             {
                 Lines = new List<DialogueLine> { new DialogueLine("C", "Sương mù ở đây thật kỳ lạ, phải không?") }
+            };
+            FlavorDialogues[Key(3, 'D')] = new DialogueDef
+            {
+                Lines = new List<DialogueLine>
+                {
+                    new DialogueLine("D", "Ta lạc vào đây đã lâu, chẳng nhớ nổi đường ra nữa."),
+                    new DialogueLine("D", "Cẩn thận, sương mù ở thung lũng này dễ khiến người ta nhầm lẫn.")
+                }
             };
         }
 
