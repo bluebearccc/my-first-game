@@ -99,7 +99,7 @@ namespace KTG
             return txt;
         }
 
-        public static Button CreateButton(Transform parent, string name, string label, Vector2 size, System.Action onClick)
+        public static Button CreateButton(Transform parent, string name, string label, Vector2 size, System.Action onClick, int fontSize = 20)
         {
             var img = CreatePanel(parent, name, size, new Color(0.14f, 0.16f, 0.26f, 0.95f), new Color(0.85f, 0.7f, 0.3f, 1f));
             var btn = img.gameObject.AddComponent<Button>();
@@ -109,8 +109,11 @@ namespace KTG
             colors.pressedColor = new Color(0.68f, 0.64f, 0.58f, 1f);
             btn.colors = colors;
 
-            var txt = CreateText(img.transform, "Label", label, 20, new Color(0.95f, 0.92f, 0.82f), TextAnchor.MiddleCenter, size);
+            var txt = CreateText(img.transform, "Label", label, fontSize, new Color(0.95f, 0.92f, 0.82f), TextAnchor.MiddleCenter, size);
             Stretch(txt.rectTransform);
+            // Chua le trong: chu khong cham vien go, nam gon trong o va de doc hon
+            txt.rectTransform.offsetMin = new Vector2(14, 4);
+            txt.rectTransform.offsetMax = new Vector2(-14, -4);
             txt.raycastTarget = false;
 
             if (onClick != null) btn.onClick.AddListener(() => onClick());

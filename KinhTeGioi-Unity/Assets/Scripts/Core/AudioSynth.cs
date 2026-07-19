@@ -37,6 +37,11 @@ namespace KTG
                 case "crystal": return Sweep(600f, 1400f, 0.5f);
                 case "hit": return Tone(new[] { 220f, 110f }, 0.15f, 0.7f, true);
                 case "win": return Chord(new[] { 523.25f, 659.25f, 783.99f, 1046.5f }, 0.8f);
+                // Khuc khai hoan: giai dieu di len roi ngan bang hop am truong
+                case "fanfare": return Melody(
+                    new[] { 523.25f, 659.25f, 783.99f, 1046.5f, 783.99f, 1046.5f, 1318.5f },
+                    new[] { 0.16f, 0.16f, 0.16f, 0.22f, 0.14f, 0.14f, 0.6f },
+                    new[] { 523.25f, 659.25f, 783.99f, 1046.5f, 1318.5f });
                 default: return Tone(new[] { 440f }, 0.1f, 0.4f, false);
             }
         }
@@ -95,6 +100,43 @@ namespace KTG
                 data[i] = Mathf.Sin(phase) * 0.5f * env;
             }
             var clip = AudioClip.Create("sweep", n, 1, SR, false);
+            clip.SetData(data, 0);
+            return clip;
+        }
+
+        // Chuoi not don noi tiep nhau, ket bang mot hop am truong ngan dai (finalChord).
+        AudioClip Melody(float[] notes, float[] durs, float[] finalChord)
+        {
+            float total = 0f;
+            for (int k = 0; k < durs.Length; k++) total += durs[k];
+            float chordDur = 1.0f;
+            int nMel = Mathf.CeilToInt(SR * total);
+            int nChord = Mathf.CeilToInt(SR * chordDur);
+            var data = new float[nMel + nChord];
+
+            int offset = 0;
+            for (int k = 0; k < notes.Length; k++)
+            {
+                int len = Mathf.CeilToInt(SR * durs[k]);
+                for (int i = 0; i < len && offset + i < nMel; i++)
+                {
+                    float t = i / (float)SR;
+                    float env = Mathf.Sin(Mathf.PI * Mathf.Clamp01(i / (float)len)) * Mathf.Exp(-1.5f * t / durs[k]);
+                    data[offset + i] += Mathf.Sin(2f * Mathf.PI * notes[k] * t) * 0.5f * env;
+                }
+                offset += len;
+            }
+            for (int i = 0; i < nChord; i++)
+            {
+                float t = i / (float)SR;
+                float env = Mathf.Exp(-2f * t / chordDur);
+                float s = 0f;
+                for (int k = 0; k < finalChord.Length; k++)
+                    s += Mathf.Sin(2f * Mathf.PI * finalChord[k] * t);
+                data[nMel + i] += s / finalChord.Length * 0.5f * env;
+            }
+
+            var clip = AudioClip.Create("melody", data.Length, 1, SR, false);
             clip.SetData(data, 0);
             return clip;
         }

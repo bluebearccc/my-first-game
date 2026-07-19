@@ -27,6 +27,7 @@ namespace KTG
         Text nameText;
         Text dialogueText;
         Text feedbackText;
+        Text backHint;
         Transform choicesRoot;
         readonly List<GameObject> choiceButtons = new List<GameObject>();
         Coroutine dialogueRoutine;
@@ -258,6 +259,10 @@ namespace KTG
             var continueHint = UIFactory.CreateText(panelImg.transform, "ContinueHint", "▶ Space / E", 14, new Color(0.7f, 0.72f, 0.8f), TextAnchor.LowerRight, new Vector2(200, 22));
             UIFactory.SetAnchor(continueHint.rectTransform, new Vector2(1, 0), new Vector2(1, 0), new Vector2(-14, 8));
 
+            backHint = UIFactory.CreateText(panelImg.transform, "BackHint", "◀ Q: Câu trước", 14, new Color(0.7f, 0.72f, 0.8f), TextAnchor.LowerLeft, new Vector2(220, 22));
+            UIFactory.SetAnchor(backHint.rectTransform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(150, 8));
+            backHint.gameObject.SetActive(false);
+
             var choicesGO = new GameObject("Choices", typeof(RectTransform));
             choicesRoot = choicesGO.transform;
             choicesRoot.SetParent(panelImg.transform, false);
@@ -275,13 +280,21 @@ namespace KTG
         IEnumerator DialogueRoutine(DialogueDef d, System.Action<string> onComplete)
         {
             dialoguePanel.SetActive(true);
-            foreach (var line in d.Lines)
+            int i = 0;
+            while (i < d.Lines.Count)
             {
+                var line = d.Lines[i];
                 SetSpeaker(line.Speaker);
                 feedbackText.gameObject.SetActive(false);
+
+                bool hasChoices = line.Choices != null && line.Choices.Count > 0;
+                // Chi cho phep quay lai khi con cau doc-duoc phia truoc (khong tua vao cau hoi trac nghiem).
+                bool canBack = !hasChoices && PrevReadableLine(d, i) >= 0;
+                backHint.gameObject.SetActive(canBack);
+
                 yield return Typewriter(line.Text);
 
-                if (line.Choices != null && line.Choices.Count > 0)
+                if (hasChoices)
                 {
                     bool correct;
                     do
@@ -301,15 +314,35 @@ namespace KTG
                         GameManager.Instance.PlaySfx(correct ? "ok" : "no");
                     }
                     while (!correct);
+                    i++;
                 }
                 else
                 {
-                    yield return WaitAdvanceKey();
+                    bool goBack = false;
+                    yield return WaitAdvanceOrBack(canBack, b => goBack = b);
+                    if (goBack)
+                    {
+                        GameManager.Instance.PlaySfx("blip");
+                        i = PrevReadableLine(d, i);
+                    }
+                    else i++;
                 }
             }
+            backHint.gameObject.SetActive(false);
             dialoguePanel.SetActive(false);
             dialogueRoutine = null;
             onComplete?.Invoke(d.Action);
+        }
+
+        // Chi so cau thoai doc-duoc (khong co lua chon) gan nhat truoc vi tri "from"; -1 neu khong co.
+        int PrevReadableLine(DialogueDef d, int from)
+        {
+            for (int k = from - 1; k >= 0; k--)
+            {
+                var l = d.Lines[k];
+                if (l.Choices == null || l.Choices.Count == 0) return k;
+            }
+            return -1;
         }
 
         IEnumerator WaitAdvanceKey()
@@ -317,6 +350,18 @@ namespace KTG
             yield return null;
             while (!(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))
                 yield return null;
+        }
+
+        // Cho nguoi choi bam tien (Space/E) hoac quay lai (Q/Backspace). onResult(true) = quay lai.
+        IEnumerator WaitAdvanceOrBack(bool canBack, System.Action<bool> onResult)
+        {
+            yield return null;
+            while (true)
+            {
+                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)) { onResult(false); yield break; }
+                if (canBack && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Backspace))) { onResult(true); yield break; }
+                yield return null;
+            }
         }
 
         IEnumerator Typewriter(string text)
@@ -368,9 +413,9 @@ namespace KTG
             for (int i = 0; i < choices.Count; i++)
             {
                 var c = choices[i];
-                var btn = UIFactory.CreateButton(choicesRoot, "Choice" + i, c.Text, new Vector2(1000, 34), () => onPick(c));
+                var btn = UIFactory.CreateButton(choicesRoot, "Choice" + i, c.Text, new Vector2(1000, 36), () => onPick(c), 16);
                 var rt = btn.GetComponent<RectTransform>();
-                UIFactory.SetAnchor(rt, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, i * 38));
+                UIFactory.SetAnchor(rt, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, i * 40));
                 choiceButtons.Add(btn.gameObject);
             }
         }
@@ -538,29 +583,82 @@ namespace KTG
         }
 
         // ------------------------------------------------------------ ENDING
+        CanvasGroup endingGroup;
+        RectTransform endingPanelRt;
+        Text endingTitle;
+        Coroutine endingRoutine;
+        static readonly Color[] EndCrystalCols =
+        {
+            new Color(0.92f, 0.62f, 0.4f), new Color(0.62f, 0.8f, 0.42f), new Color(0.42f, 0.82f, 0.9f),
+            new Color(0.78f, 0.52f, 0.9f), new Color(0.95f, 0.8f, 0.38f)
+        };
+
         void BuildEnding()
         {
-            var panel = UIFactory.CreatePanel(canvas.transform, "Ending", new Vector2(900, 500), PanelFill, PanelBorder);
-            UIFactory.SetAnchor(panel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero);
-            endingPanel = panel.gameObject;
+            // Lop phu toan man hinh — nen dien anh cho man ket
+            var root = new GameObject("Ending", typeof(RectTransform), typeof(CanvasGroup));
+            var rootRt = (RectTransform)root.transform;
+            rootRt.SetParent(canvas.transform, false);
+            UIFactory.Stretch(rootRt);
+            endingPanel = root;
+            endingGroup = root.GetComponent<CanvasGroup>();
 
-            var titleText = UIFactory.CreateText(panel.transform, "Title", "HÀNH TRÌNH HOÀN TẤT", 30, Gold, TextAnchor.MiddleCenter, new Vector2(860, 40));
-            UIFactory.SetAnchor(titleText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0, -30));
+            var bg = UIFactory.CreateImage(rootRt, "Bg", PixelArt.VGradient(new Color(0.06f, 0.05f, 0.12f), new Color(0.01f, 0.01f, 0.03f)), new Vector2(1280, 720));
+            UIFactory.Stretch(bg.rectTransform);
+
+            // Hao quang chien thang phia sau
+            var glow = UIFactory.CreateImage(rootRt, "Glow", PixelArt.Glow(new Color(1f, 0.85f, 0.45f, 0.4f), 128), new Vector2(1000, 1000));
+            glow.rectTransform.anchoredPosition = new Vector2(0, 140);
+            glow.raycastTarget = false;
+            var glowBob = glow.gameObject.AddComponent<Bobber>();
+            glowBob.Amplitude = 14f; glowBob.Speed = 0.8f;
+
+            var panel = UIFactory.CreatePanel(rootRt, "Panel", new Vector2(960, 620), PanelFill, PanelBorder);
+            UIFactory.SetAnchor(panel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero);
+            endingPanelRt = panel.rectTransform;
+
+            // Chom sang lap lanh hai ben tieu de
+            for (int s = 0; s < 6; s++)
+            {
+                var star = UIFactory.CreateImage(panel.transform, "Star" + s, PixelArt.Glow(new Color(1f, 0.92f, 0.6f, 0.9f), 32), new Vector2(18, 18));
+                UIFactory.SetAnchor(star.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2((s - 2.5f) * 150f, -18));
+                star.raycastTarget = false;
+                var sb = star.gameObject.AddComponent<Bobber>();
+                sb.Amplitude = 5f; sb.Speed = 2f + s * 0.4f;
+            }
+
+            endingTitle = UIFactory.CreateText(panel.transform, "Title", "✦  KHÚC KHẢI HOÀN  ✦", 34, Gold, TextAnchor.MiddleCenter, new Vector2(880, 46));
+            endingTitle.fontStyle = FontStyle.Bold;
+            UIFactory.SetAnchor(endingTitle.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0, -36));
+
+            // 5 vien ngoc ruc sang — thanh qua ca hanh trinh
+            for (int c = 0; c < EndCrystalCols.Length; c++)
+            {
+                var glowC = UIFactory.CreateImage(panel.transform, "CrystalGlow" + c, PixelArt.Glow(EndCrystalCols[c] * 1.1f, 64), new Vector2(72, 72));
+                UIFactory.SetAnchor(glowC.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2((c - 2) * 96f, -104));
+                glowC.raycastTarget = false;
+
+                var ci = UIFactory.CreateImage(panel.transform, "Crystal" + c, PixelArt.Crystal(EndCrystalCols[c], 32), new Vector2(44, 44));
+                UIFactory.SetAnchor(ci.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2((c - 2) * 96f, -104));
+                ci.raycastTarget = false;
+                var cb = ci.gameObject.AddComponent<Bobber>();
+                cb.Amplitude = 7f; cb.Speed = 1.5f + c * 0.35f;
+            }
 
             var body = UIFactory.CreateText(panel.transform, "Body",
-                "Bạn đã thu thập đủ năm Economic Crystal và đánh bại Solandor, Vua Độc Quyền.\n\n" +
-                "Cạnh tranh sinh ra độc quyền, nhưng độc quyền không thủ tiêu cạnh tranh — nó chỉ khiến cạnh tranh trở nên đa dạng và gay gắt hơn. " +
-                "Đó là quy luật thống nhất và đấu tranh giữa cạnh tranh và độc quyền trong nền kinh tế thị trường.\n\n" +
-                "Ở Việt Nam, Nhà nước đóng vai trò điều tiết: kiểm soát độc quyền, bảo vệ cạnh tranh lành mạnh, hài hòa lợi ích giữa doanh nghiệp và xã hội — " +
-                "trong nền kinh tế thị trường định hướng xã hội chủ nghĩa.\n\nCảm ơn bạn đã đồng hành cùng Econia.",
-                18, Ink, TextAnchor.UpperLeft, new Vector2(820, 300));
-            UIFactory.SetAnchor(body.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0, -90));
+                "Năm Economic Crystal hội tụ, ánh sáng bừng lên xé tan bóng tối độc quyền — Solandor, Vua Độc Quyền, quỳ gối trước quy luật của thị trường.\n\n" +
+                "Nhưng bạn hiểu rằng chiến thắng này không phải dấu chấm hết. Cạnh tranh sinh ra độc quyền, song độc quyền không bao giờ thủ tiêu được cạnh tranh — nó chỉ khiến cạnh tranh trở nên đa dạng và gay gắt hơn. Đó là quy luật thống nhất và đấu tranh bất tận giữa cạnh tranh và độc quyền.\n\n" +
+                "Trên mảnh đất Econia hồi sinh, những khu chợ lại rộn ràng, người bán kẻ mua lại tự do trao đổi. Và ở quê nhà, bạn thấy bóng dáng một nền kinh tế thị trường định hướng xã hội chủ nghĩa — nơi Nhà nước điều tiết, kiểm soát độc quyền, giữ cho cạnh tranh luôn lành mạnh, hài hòa lợi ích của doanh nghiệp và toàn xã hội.\n\n" +
+                "Hành trình khép lại, nhưng tri thức bạn mang theo sẽ còn thắp sáng những con đường phía trước.\n\nCảm ơn bạn đã đồng hành cùng Econia.",
+                17, Ink, TextAnchor.UpperLeft, new Vector2(880, 380));
+            UIFactory.SetAnchor(body.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0, -150));
 
             UIFactory.CreateButton(panel.transform, "MenuBtn", "Về Menu Chính", new Vector2(260, 46), () =>
             {
+                if (endingRoutine != null) StopCoroutine(endingRoutine);
                 endingPanel.SetActive(false);
                 GameManager.Instance.ReturnToMenu();
-            }).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -(500 / 2f) + 40);
+            }).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -(620 / 2f) + 40);
 
             endingPanel.SetActive(false);
         }
@@ -569,6 +667,38 @@ namespace KTG
         {
             hudPanel.SetActive(false);
             endingPanel.SetActive(true);
+            if (endingRoutine != null) StopCoroutine(endingRoutine);
+            endingRoutine = StartCoroutine(EndingRoutine());
+        }
+
+        IEnumerator EndingRoutine()
+        {
+            endingGroup.alpha = 0f;
+            GameManager.Instance.PlaySfx("fanfare");
+
+            // Hien dan + phong to nhe cho panel (hieu ung "bung sang")
+            float t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * 1.1f;
+                float e = Mathf.Clamp01(t);
+                endingGroup.alpha = e;
+                float scale = Mathf.Lerp(0.82f, 1f, 1f - (1f - e) * (1f - e)); // ease-out
+                endingPanelRt.localScale = new Vector3(scale, scale, 1f);
+                yield return null;
+            }
+            endingGroup.alpha = 1f;
+            endingPanelRt.localScale = Vector3.one;
+
+            // Nhip vang lap lai cho tieu de
+            float pulse = 0f;
+            while (endingPanel.activeSelf)
+            {
+                pulse += Time.deltaTime * 2.2f;
+                float g = 0.82f + Mathf.Sin(pulse) * 0.12f;
+                endingTitle.color = new Color(g, g * 0.85f, 0.38f);
+                yield return null;
+            }
         }
 
         // ------------------------------------------------------------ MAP TITLE
