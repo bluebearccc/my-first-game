@@ -1037,6 +1037,104 @@ namespace KTG
             });
         }
 
+        // Dat ruong da cay (16x16 tile) — nen nau + vang cay ngang, giong Ground nhung co ranh
+        public static Sprite TilledSoil(int seed)
+        {
+            return Cached("till" + seed, () =>
+            {
+                var t = NewTex(16, 16);
+                var soil = new Color32(112, 78, 52, 255);
+                var soilD = new Color32(84, 58, 38, 255);
+                var soilL = new Color32(134, 96, 64, 255);
+                Rect(t, 0, 0, 16, 16, soil);
+                for (int y = 1; y < 16; y += 4)
+                {
+                    Rect(t, 0, y, 16, 1, soilD);
+                    Rect(t, 0, y + 1, 16, 1, soilL);
+                }
+                var r = new System.Random(seed);
+                for (int i = 0; i < 4; i++)
+                    P(t, r.Next(16), r.Next(16), soilL);
+                return Make(t, 16, new Vector2(0.5f, 0.5f));
+            });
+        }
+
+        // Luong cay trong 16x20 pivot day — 3-4 nhanh, type chon mau (0=rau xanh,1=lua vang,2=ngo)
+        public static Sprite Crop(int type, int seed)
+        {
+            return Cached("crop" + type + seed, () =>
+            {
+                var t = NewTex(16, 20);
+                var stem = new Color32(70, 110, 55, 255);
+                Color leafC = type == 0 ? new Color32(90, 165, 70, 255)
+                    : type == 1 ? new Color32(215, 185, 80, 255)
+                    : new Color32(200, 165, 60, 255);
+                var leafD = Color.Lerp(leafC, Color.black, 0.25f);
+                var r = new System.Random(seed * 11 + 3);
+                int stalks = 3 + r.Next(2);
+                for (int i = 0; i < stalks; i++)
+                {
+                    int bx = 2 + r.Next(12);
+                    int h = 7 + r.Next(6);
+                    Rect(t, bx, 20 - h, 1, h, stem);
+                    P(t, bx - 1, 20 - h, leafD); P(t, bx + 1, 20 - h + 1, leafC);
+                    P(t, bx, 20 - h - 1, leafC);
+                    if (type == 2) P(t, bx, 20 - h, new Color32(235, 210, 120, 255)); // bap ngo
+                }
+                return Make(t, 16, new Vector2(0.5f, 0f));
+            });
+        }
+
+        // Bu nhin rom 16x22 pivot day — coc + ao rom + mu, tay dang ngang
+        public static Sprite Scarecrow()
+        {
+            return Cached("scare", () =>
+            {
+                var t = NewTex(16, 22);
+                var wood = new Color32(120, 88, 58, 255);
+                var straw = new Color32(210, 178, 90, 255);
+                var strawD = new Color32(180, 148, 68, 255);
+                var cloth = new Color32(140, 70, 60, 255);
+                var hat = new Color32(90, 62, 42, 255);
+                var face = new Color32(224, 196, 150, 255);
+
+                Rect(t, 7, 8, 2, 12, wood);      // coc doc
+                Rect(t, 2, 12, 12, 2, wood);     // tay ngang
+                Rect(t, 3, 13, 2, 4, cloth); Rect(t, 11, 13, 2, 4, cloth); // tay ao rom hai ben
+                Rect(t, 5, 10, 6, 8, cloth);     // than ao
+                Rect(t, 5, 15, 6, 1, strawD);
+                P(t, 5, 18, straw); P(t, 10, 19, straw); P(t, 6, 20, straw); // rom lo ra chan
+
+                Rect(t, 5, 4, 6, 5, face);       // mat rom (dau)
+                P(t, 6, 6, new Color32(40, 30, 30, 255)); P(t, 9, 6, new Color32(40, 30, 30, 255));
+                Rect(t, 4, 2, 8, 2, hat); Rect(t, 3, 4, 10, 1, hat); // non
+                return Make(t, 16, new Vector2(0.5f, 0f));
+            });
+        }
+
+        // Dong rom 16x14 pivot day — bo rom vang tron
+        public static Sprite Haystack(int seed)
+        {
+            return Cached("hay" + seed, () =>
+            {
+                var t = NewTex(16, 14);
+                var straw = new Color32(216, 182, 92, 255);
+                var strawD = new Color32(184, 150, 68, 255);
+                var strawL = new Color32(232, 204, 128, 255);
+                var r = new System.Random(seed);
+                for (int y = 2; y < 13; y++)
+                    for (int x = 1; x < 15; x++)
+                    {
+                        float dx = (x - 7.5f) / 7f, dy = (y - 8f) / 5.5f;
+                        if (dx * dx + dy * dy <= 1f) P(t, x, y, strawD);
+                    }
+                for (int i = 0; i < 10; i++)
+                    P(t, 3 + r.Next(10), 3 + r.Next(8), r.Next(2) == 0 ? straw : strawL);
+                Rect(t, 3, 11, 10, 2, strawD);
+                return Make(t, 16, new Vector2(0.5f, 0f));
+            });
+        }
+
         // Gradient doc cho nen menu
         public static Sprite VGradient(Color top, Color bottom, int size = 128)
         {

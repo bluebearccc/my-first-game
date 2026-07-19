@@ -416,6 +416,21 @@ namespace KTG
         }
     }
 
+    // Dung dua nhe ngon cay trong theo gio (nghieng quanh pivot day, lech pha ngau nhien).
+    public class CropSway : MonoBehaviour
+    {
+        public float Amplitude = 4f; // do nghieng toi da (Euler Z)
+        public float Speed = 1.6f;
+        float phase;
+
+        void Awake() { phase = Random.Range(0f, Mathf.PI * 2f); }
+
+        void Update()
+        {
+            transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Sin(Time.time * Speed + phase) * Amplitude);
+        }
+    }
+
     // Gon nhe mau tile nuoc de tao cam giac gon song.
     public class WaterAnim : MonoBehaviour
     {

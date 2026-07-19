@@ -59,6 +59,11 @@ namespace KTG
                         w.gameObject.AddComponent<WaterAnim>();
                         walkable = false;
                     }
+                    else if (ch == '=')
+                    {
+                        SpawnTile(root, pos, PixelArt.TilledSoil(x * 17 + y * 23), -10000);
+                        walkable = false;
+                    }
                     else
                     {
                         var groundColor = ch == ',' ? map.Grass : map.Ground;
@@ -214,6 +219,30 @@ namespace KTG
                         {
                             var fence = SpawnProp(root, pos, PixelArt.Fence());
                             Shadow2D.AddCaster(fence.gameObject, 1f, 0.15f);
+                            walkable = false;
+                            break;
+                        }
+
+                        case 'i':
+                        {
+                            var crop = SpawnProp(root, pos, PixelArt.Crop(mapIndex % 3, x * 5 + y * 13));
+                            crop.gameObject.AddComponent<CropSway>();
+                            walkable = false;
+                            break;
+                        }
+
+                        case 'j':
+                        {
+                            var scarecrow = SpawnProp(root, pos, PixelArt.Scarecrow());
+                            Shadow2D.AddCaster(scarecrow.gameObject, 0.8f, 0.3f);
+                            walkable = false;
+                            break;
+                        }
+
+                        case 'h':
+                        {
+                            var haystack = SpawnProp(root, pos, PixelArt.Haystack(x * 7 + y * 3));
+                            Shadow2D.AddCaster(haystack.gameObject, 0.9f, 0.3f);
                             walkable = false;
                             break;
                         }

@@ -10,7 +10,7 @@
 | B | Vật liệu Lit + đèn 2D (global + point light theo map) | ✅ Xong & đã nghiệm thu (commit `d9ccc7b`) |
 | C | Post-processing: Bloom + Vignette + Color + DoF | ✅ Xong & đã nghiệm thu (commit `d6260da`) |
 | D | (Tùy chọn) Đổ bóng / normal map / camera diorama | 🟡 D3 đã dựng thử trên `exp/hd2d-phase-d` (commit `c43f4ee`, nghiệm thu 5/5 map, FPS 154–164) — chờ người dùng duyệt để merge; D1/D2 chưa làm |
-| NPC/đồng ruộng/con vật (kế hoạch `04-npc-dongruong-convat-plan.md`) | Nhóm A (con vật) ✅ xong & nghiệm thu; Nhóm B/C ⬜ chưa làm |
+| NPC/đồng ruộng/con vật (kế hoạch `04-npc-dongruong-convat-plan.md`) | Nhóm A ✅, Nhóm B (đồng ruộng) ✅ xong & nghiệm thu; Nhóm C ⬜ chưa làm |
 
 Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸ tạm dừng chờ quyết định
 
@@ -23,6 +23,33 @@ Chú thích: ⬜ chưa · 🟡 đang làm · ✅ xong & đã nghiệm thu · ⏸
 ---
 
 ## Log
+
+### 2026-07-19 · Nhóm B (kế hoạch `04-npc-dongruong-convat-plan.md`) · Đồng ruộng trang trí (XONG, nghiệm thu 5/5 map)
+
+**Đã làm:**
+- Impact trước khi sửa: `MapBuilder.Build` = LOW; `MapBuilder.SpawnTile`/`SpawnProp` = **HIGH** (đúng mẫu rủi ro
+  plan đã lường trước, giống Phase B cũ và Nhóm A vừa làm) — tiếp tục với cùng mitigation (nghiệm thu 5 map).
+- `PixelArt.cs`: thêm `TilledSoil(seed)` (tile 16×16, luống cày), `Crop(type, seed)` (prop 16×20, 3-4
+  nhánh cây, type 0=rau/1=lúa/2=ngô theo `mapIndex % 3`), `Scarecrow()` (16×22), `Haystack(seed)` (16×14).
+- `WorldComponents.cs`: thêm `CropSway` (nghiêng nhẹ quanh pivot đáy theo Perlin/sin, lệch pha ngẫu nhiên).
+- `MapBuilder.Build`: thêm nhánh tile `case '='` (TilledSoil, không đi được) và case prop `i` (Crop +
+  `CropSway`), `j` (Scarecrow + `Shadow2D.AddCaster`), `h` (Haystack + `Shadow2D.AddCaster`) — tất cả
+  `walkable = false`, nhận đèn 2D qua `SpawnTile/SpawnProp` có sẵn (không cần code riêng).
+- `GameContent.cs`: rải ruộng trang trí cạnh hàng rào có sẵn ở map0 (market, góc dưới trái/phải) và
+  map1 (guild, cạnh nhà đầu map) — thuần trang trí, không đụng `Flow`/`Objectives`.
+
+**Nghiệm thu (Unity 2022.3.62f3, Play thật qua harness `HD2DTestRunner`, `-hd2dLabel groupB-after`):**
+- Biên dịch sạch. `gitnexus_detect_changes()`: đúng 4 file dự kiến (`PixelArt.cs`, `MapBuilder.cs`,
+  `WorldComponents.cs`, `GameContent.cs`).
+- 5/5 map render đúng, không hồng/lủng tile: map0=162.8fps, map1=164.1fps, map2=164.1fps,
+  map3=164.1fps, map4=164.8fps (chuẩn ≥60 ĐẠT).
+- Quan sát ảnh: luống cày (nâu, có rãnh) tách biệt rõ với cỏ xanh; bù nhìn rơm + đống rơm hiển thị
+  đúng vị trí góc map0/map1; cây trồng có bóng đổ qua `Shadow2D`.
+- Ảnh: scratchpad `shots/groupB-after/map0..4.png` + `summary.txt` (không commit vào repo).
+
+**Còn lại:** chưa test bằng di chuyển thật xem người chơi có bị chặn đúng ở luống/prop mới hay không
+(logic `walkable = false` đồng nhất với các prop khác nên tin cậy cao, nhưng chưa click-test tay).
+Nhóm C (NPC/animation phụ) chưa làm.
 
 ### 2026-07-19 · Nhóm A (kế hoạch `04-npc-dongruong-convat-plan.md`) · Con vật nét hơn + thêm loài (XONG, nghiệm thu 5/5 map)
 
