@@ -99,6 +99,14 @@ namespace KTG
                             break;
                         }
 
+                        case 'Y': // cay la hong (anh dao) — bien the mau cua 'T'
+                        {
+                            var pink = SpawnProp(root, pos, PixelArt.Tree(new Color(0.93f, 0.58f, 0.72f), new Color(0.42f, 0.29f, 0.2f)));
+                            Shadow2D.AddCaster(pink.gameObject, 0.9f, 0.4f);
+                            walkable = false;
+                            break;
+                        }
+
                         case 't':
                         {
                             var torch = SpawnProp(root, pos, PixelArt.Torch(flame));

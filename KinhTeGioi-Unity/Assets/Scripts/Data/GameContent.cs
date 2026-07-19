@@ -44,6 +44,10 @@ namespace KTG
             g.Set(4, 9, 'b'); g.Set(5, 9, 'c'); g.Set(22, 9, 'c'); g.Set(23, 9, 'b');
             // bui cay + bien chi duong
             g.Set(10, 2, 'u'); g.Set(16, 2, 'u'); g.Set(26, 7, 'n');
+            // them cay coi + bui co rim ban do (xanh 'T' / hong 'Y')
+            g.Set(9, 1, 'T'); g.Set(18, 1, 'T');
+            g.Set(5, 1, 'Y'); g.Set(22, 1, 'Y');
+            g.Set(1, 3, 'u'); g.Set(26, 3, 'u'); g.Set(1, 12, 'u'); g.Set(26, 12, 'u');
             // dong vat trong cho
             g.Set(10, 6, 'k'); g.Set(16, 6, 'k'); g.Set(13, 9, 'd');
             g.Set(5, 5, 'm'); g.Set(23, 5, 'e'); g.Set(7, 12, 'g'); g.Set(19, 12, 'y');
@@ -111,6 +115,10 @@ namespace KTG
             g.Set(3, 4, 'F'); g.Set(4, 4, 'F'); g.Set(23, 4, 'F'); g.Set(24, 4, 'F');
             // bui cay + bien
             g.Set(12, 2, 'u'); g.Set(15, 2, 'u'); g.Set(26, 7, 'n');
+            // them cay coi + bui co rim ban do (xanh 'T' / hong 'Y')
+            g.Set(5, 1, 'T'); g.Set(22, 1, 'T');
+            g.Set(9, 1, 'Y'); g.Set(18, 1, 'Y');
+            g.Set(1, 3, 'u'); g.Set(26, 3, 'u'); g.Set(1, 12, 'u'); g.Set(26, 12, 'u');
             // dong vat thi tran
             g.Set(11, 8, 'k'); g.Set(16, 9, 'd');
             g.Set(17, 3, 'm'); g.Set(10, 6, 'e'); g.Set(24, 9, 'g'); g.Set(5, 11, 'y');
@@ -175,6 +183,10 @@ namespace KTG
             // hang rao ben cang
             g.Set(3, 13, 'F'); g.Set(4, 13, 'F'); g.Set(23, 13, 'F'); g.Set(24, 13, 'F');
             g.Set(26, 7, 'n');
+            // them cay coi + bui co rim cong vien (xanh 'T' / hong 'Y')
+            g.Set(5, 1, 'T'); g.Set(22, 1, 'T');
+            g.Set(9, 1, 'Y'); g.Set(18, 1, 'Y');
+            g.Set(1, 3, 'u'); g.Set(26, 3, 'u'); g.Set(1, 12, 'u'); g.Set(26, 12, 'u');
             // cho canh gac ngan hang
             g.Set(16, 9, 'd');
             // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
@@ -227,6 +239,10 @@ namespace KTG
             g.Set(8, 3, 'r'); g.Set(18, 3, 'r'); g.Set(3, 8, 'r'); g.Set(24, 8, 'r');
             // bui cay
             g.Set(10, 12, 'u'); g.Set(16, 12, 'u'); g.Set(2, 5, 'u'); g.Set(25, 5, 'u');
+            // them cay coi + bui co rim thung lung (xanh 'T' / hong 'Y' hop tong tim)
+            g.Set(9, 1, 'T'); g.Set(18, 1, 'T');
+            g.Set(5, 1, 'Y'); g.Set(22, 1, 'Y');
+            g.Set(1, 3, 'u'); g.Set(26, 3, 'u'); g.Set(1, 11, 'u'); g.Set(26, 11, 'u');
             // hang rao do nat cua khu dinh cu cu
             g.Set(6, 6, 'F'); g.Set(7, 6, 'F'); g.Set(20, 6, 'F'); g.Set(21, 6, 'F');
             // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
@@ -279,6 +295,10 @@ namespace KTG
             g.Set(9, 11, 'F'); g.Set(10, 11, 'F'); g.Set(16, 11, 'F'); g.Set(17, 11, 'F');
             // thung hang cong nap
             g.Set(4, 11, 'b'); g.Set(22, 11, 'b');
+            // them cay coi + bui co hai ben san cung dien (xanh 'T' / hong 'Y')
+            g.Set(2, 2, 'T'); g.Set(25, 2, 'T');
+            g.Set(4, 2, 'Y'); g.Set(23, 2, 'Y');
+            g.Set(2, 6, 'u'); g.Set(25, 6, 'u'); g.Set(2, 9, 'u'); g.Set(25, 9, 'u');
             // linh gac
             g.Set(13, 10, 'A');
             // cau chuyen an trong goc cung dien
