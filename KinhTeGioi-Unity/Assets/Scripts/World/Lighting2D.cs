@@ -16,7 +16,15 @@ namespace KTG
             get
             {
                 if (litMat == null)
-                    litMat = new Material(Shader.Find("Universal Render Pipeline/2D/Sprite-Lit-Default"));
+                {
+                    var shader = Shader.Find("Universal Render Pipeline/2D/Sprite-Lit-Default");
+                    // Trong bản build, shader lit có thể bị strip nếu không nằm trong "Always
+                    // Included Shaders" → Shader.Find trả null. Fallback về sprite shader mặc
+                    // định để KHÔNG bao giờ ném exception làm đen toàn màn hình (sprite vẫn hiện,
+                    // chỉ mất hiệu ứng ánh sáng 2D). Build script đã bảo đảm shader lit được đóng gói.
+                    if (shader == null) shader = Shader.Find("Sprites/Default");
+                    litMat = new Material(shader);
+                }
                 return litMat;
             }
         }
