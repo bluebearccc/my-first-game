@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinh Tế Giới (Econia) — Hành trình qua năm vùng đất kinh tế</title>
+<meta name="description" content="Game phiêu lưu 2D pixel-art HD-2D giáo dục về Kinh tế Chính trị Mác–Lênin: chương Độc quyền và Chủ nghĩa tư bản độc quyền. Đi qua 5 vùng đất, thu thập 5 Economic Crystal.">
+<style>
+  :root{
+    --bg:#0b0d1e; --bg2:#06060d; --panel:#141733; --panel2:#1b1f40;
+    --gold:#e0bd59; --gold-soft:#f0d78a; --ink:#ece6d4; --muted:#9a9cae;
+    --border:rgba(224,189,89,.28); --border-strong:rgba(224,189,89,.55);
+    --c1:#eb9f66; --c2:#9ecb6b; --c3:#6bd1e6; --c4:#c685e6; --c5:#f2cc61;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);line-height:1.65;
+    background:
+      radial-gradient(1100px 620px at 50% -8%, rgba(107,180,255,.16), transparent 60%),
+      radial-gradient(900px 500px at 90% 12%, rgba(198,133,230,.12), transparent 60%),
+      linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+    background-attachment:fixed;min-height:100vh;overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .mono{font-family:'Consolas','SF Mono',ui-monospace,monospace}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+    background:rgba(8,9,20,.72);border-bottom:1px solid var(--border);
+  }
+  .nav-in{display:flex;align-items:center;gap:18px;height:62px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+  .brand .gem{width:16px;height:16px;transform:rotate(45deg);border-radius:3px;
+    background:linear-gradient(135deg,var(--c3),var(--gold));box-shadow:0 0 14px rgba(107,209,230,.6)}
+  .brand b{color:var(--gold)}
+  .nav-links{margin-left:auto;display:flex;gap:26px;align-items:center}
+  .nav-links a{color:var(--muted);font-size:.94rem;transition:color .2s}
+  .nav-links a:hover{color:var(--gold-soft)}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+    font-weight:700;letter-spacing:.3px;border-radius:11px;padding:12px 22px;
+    border:1px solid var(--border-strong);color:#1a1607;
+    background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+    box-shadow:0 6px 20px rgba(224,189,89,.25);transition:transform .15s, box-shadow .2s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(224,189,89,.4)}
+  .btn.ghost{background:transparent;color:var(--gold-soft);box-shadow:none;border-color:var(--border-strong)}
+  .btn.ghost:hover{background:rgba(224,189,89,.09)}
+  .nav-links .btn{padding:9px 18px}
+
+  /* ---------- HERO ---------- */
+  header.hero{padding:64px 0 40px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.8rem;letter-spacing:2.5px;
+    text-transform:uppercase;color:var(--gold);border:1px solid var(--border);
+    padding:6px 14px;border-radius:999px;background:rgba(224,189,89,.06)}
+  h1.title{
+    font-size:clamp(2.7rem,7vw,4.6rem);line-height:1.02;margin:20px 0 6px;font-weight:900;
+    letter-spacing:1px;color:#fff;
+    text-shadow:0 2px 0 rgba(0,0,0,.35), 0 0 34px rgba(224,189,89,.25);
+  }
+  h1.title .en{display:block;font-size:.32em;letter-spacing:8px;color:var(--gold);margin-top:10px;font-weight:700}
+  .slogan{font-size:clamp(1.05rem,2.4vw,1.35rem);color:var(--gold-soft);font-style:italic;margin:14px 0 18px}
+  .lede{color:var(--muted);font-size:1.02rem;max-width:36em}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+  .crystals{display:flex;gap:12px;margin-top:30px}
+  .crystals i{width:22px;height:22px;transform:rotate(45deg);border-radius:5px;display:block;
+    animation:bob 2.6s ease-in-out infinite}
+  .crystals i:nth-child(1){background:var(--c1);box-shadow:0 0 16px var(--c1);animation-delay:0s}
+  .crystals i:nth-child(2){background:var(--c2);box-shadow:0 0 16px var(--c2);animation-delay:.3s}
+  .crystals i:nth-child(3){background:var(--c3);box-shadow:0 0 16px var(--c3);animation-delay:.6s}
+  .crystals i:nth-child(4){background:var(--c4);box-shadow:0 0 16px var(--c4);animation-delay:.9s}
+  .crystals i:nth-child(5){background:var(--c5);box-shadow:0 0 16px var(--c5);animation-delay:1.2s}
+  @keyframes bob{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(-7px)}}
+  .hero-shot{position:relative}
+  .frame{border:2px solid var(--border-strong);border-radius:16px;overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.04);
+    image-rendering:pixelated;background:#06060d}
+  .frame img{width:100%}
+  .hero-shot .tag{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+    background:var(--panel2);border:1px solid var(--border);border-radius:999px;
+    padding:7px 18px;font-size:.82rem;color:var(--gold-soft);white-space:nowrap;
+    box-shadow:0 8px 22px rgba(0,0,0,.4)}
+
+  /* ---------- SECTION ---------- */
+  section{padding:62px 0}
+  .sec-head{text-align:center;max-width:720px;margin:0 auto 44px}
+  .kicker{color:var(--gold);letter-spacing:3px;text-transform:uppercase;font-size:.78rem;font-weight:700}
+  h2{font-size:clamp(1.7rem,4vw,2.5rem);margin:12px 0 12px;color:#fff;letter-spacing:.5px}
+  .sec-head p{color:var(--muted)}
+
+  /* ---------- ABOUT strip ---------- */
+  .about{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .stat{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--border);
+    border-radius:14px;padding:24px;text-align:center}
+  .stat .n{font-size:2.2rem;font-weight:900;color:var(--gold);line-height:1}
+  .stat .l{color:var(--muted);font-size:.92rem;margin-top:8px}
+
+  /* ---------- REGIONS ---------- */
+  .region{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;margin-bottom:40px}
+  .region:nth-child(even) .region-txt{order:2}
+  .region-txt .num{font-size:.85rem;font-weight:800;letter-spacing:2px;color:var(--muted)}
+  .region-txt h3{font-size:1.5rem;margin:6px 0 4px;color:#fff}
+  .region-txt .en{color:var(--gold-soft);font-size:.95rem;margin-bottom:12px}
+  .region-txt p{color:var(--muted)}
+  .concept{display:inline-block;margin-top:14px;padding:6px 14px;border-radius:999px;
+    font-size:.82rem;font-weight:700;border:1px solid var(--border-strong);color:var(--gold-soft);
+    background:rgba(224,189,89,.07)}
+  .region .frame{transition:transform .3s}
+  .region .frame:hover{transform:translateY(-4px)}
+
+  /* ---------- FEATURES ---------- */
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .feat{background:linear-gradient(180deg,var(--panel),rgba(20,23,51,.5));border:1px solid var(--border);
+    border-radius:16px;padding:26px;transition:border-color .25s, transform .2s}
+  .feat:hover{border-color:var(--border-strong);transform:translateY(-3px)}
+  .feat .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:1.5rem;
+    background:rgba(224,189,89,.1);border:1px solid var(--border);margin-bottom:14px}
+  .feat h4{font-size:1.12rem;color:var(--gold-soft);margin-bottom:7px}
+  .feat p{color:var(--muted);font-size:.95rem}
+
+  /* ---------- MESSAGE ---------- */
+  .message{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--border-strong);
+    border-radius:20px;padding:44px;position:relative;overflow:hidden}
+  .message::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(500px 260px at 15% 0%, rgba(107,209,230,.12), transparent 65%);pointer-events:none}
+  .quote{font-size:clamp(1.15rem,2.6vw,1.55rem);color:var(--ink);font-style:italic;line-height:1.55;
+    max-width:44em;position:relative}
+  .quote::before{content:"“";font-size:3.4rem;color:var(--gold);line-height:0;vertical-align:-.35em;margin-right:6px}
+  .misconceptions{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+  .mis{background:rgba(6,6,13,.5);border:1px solid rgba(230,120,120,.35);border-radius:14px;padding:20px}
+  .mis .x{color:#f08a8a;font-weight:800;font-size:.82rem;letter-spacing:1px}
+  .mis p{margin-top:6px;color:var(--ink)}
+  .mis small{display:block;margin-top:8px;color:var(--muted)}
+  .verdict{margin-top:26px;text-align:center;color:var(--gold-soft);font-weight:700;font-size:1.05rem}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .gallery .frame{transition:transform .3s}
+  .gallery .frame:hover{transform:scale(1.015)}
+
+  /* ---------- DOWNLOAD ---------- */
+  .download{background:
+    radial-gradient(700px 300px at 50% 0%, rgba(224,189,89,.14), transparent 70%),
+    linear-gradient(180deg,var(--panel),var(--panel2));
+    border:1px solid var(--border-strong);border-radius:22px;padding:52px 40px;text-align:center}
+  .download h2{margin-bottom:8px}
+  .dl-meta{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;color:var(--muted);
+    font-size:.92rem;margin:22px 0 6px}
+  .dl-meta span b{color:var(--ink)}
+  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;
+    max-width:760px;margin:34px auto 0}
+  .key{display:flex;align-items:center;gap:10px;background:rgba(6,6,13,.5);border:1px solid var(--border);
+    border-radius:11px;padding:11px 14px;font-size:.9rem;color:var(--muted)}
+  .key kbd{font-family:inherit;font-weight:700;color:#1a1607;background:var(--gold-soft);
+    border-radius:6px;padding:2px 9px;font-size:.82rem;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+  .note{margin-top:24px;font-size:.85rem;color:var(--muted)}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--border);margin-top:30px;padding:34px 0;color:var(--muted);font-size:.9rem}
+  .foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+
+  @media(max-width:820px){
+    .hero-grid{grid-template-columns:1fr;gap:34px}
+    .about,.features,.misconceptions,.gallery{grid-template-columns:1fr}
+    .region{grid-template-columns:1fr;gap:18px}
+    .region:nth-child(even) .region-txt{order:0}
+    .nav-links a:not(.btn){display:none}
+    .message{padding:28px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="brand"><span class="gem"></span> KINH TẾ <b>GIỚI</b></div>
+    <div class="nav-links">
+      <a href="#gioi-thieu">Giới thiệu</a>
+      <a href="#vung-dat">5 Vùng đất</a>
+      <a href="#loi-choi">Lối chơi</a>
+      <a href="#thong-diep">Thông điệp</a>
+      <a href="#tai-game" class="btn">⬇ Tải game</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">◆ Pixel-art HD-2D · Giáo dục</span>
+      <h1 class="title">KINH TẾ GIỚI<span class="en">E · C · O · N · I · A</span></h1>
+      <p class="slogan">“Hành trình qua năm vùng đất kinh tế”</p>
+      <p class="lede">Một game phiêu lưu 2D biến chương <b>“Độc quyền và Chủ nghĩa tư bản độc quyền”</b>
+        trong Kinh tế Chính trị Mác–Lênin thành hành trình khám phá 5 vùng đất — vừa chơi, vừa trả lời
+        câu hỏi phản biện để thu thập đủ 5 <b>Economic Crystal</b> và tìm đường về nhà.</p>
+      <div class="hero-cta">
+        <a href="#tai-game" class="btn">⬇ Tải game (Windows)</a>
+        <a href="#vung-dat" class="btn ghost">Khám phá 5 vùng đất</a>
+      </div>
+      <div class="crystals" title="5 Economic Crystal"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="hero-shot">
+      <div class="frame"><img src="assets/hero.png" alt="Ảnh trong game — Market of Many Hands"></div>
+      <span class="tag">Toàn bộ đồ họa được vẽ 100% bằng code — không dùng asset ngoài</span>
+    </div>
+  </div>
+</header>
+
+<section id="gioi-thieu">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Về game</span>
+      <h2>Học lý luận kinh tế qua một cuộc phiêu lưu</h2>
+      <p>Người chơi tỉnh dậy mất trí nhớ giữa thế giới Econia — nơi vận hành hoàn toàn bằng quy luật
+        kinh tế — và phải đi qua 5 vùng đất, mỗi vùng minh họa một khái niệm trong lý luận về độc quyền.</p>
+    </div>
+    <div class="about">
+      <div class="stat"><div class="n">5</div><div class="l">Vùng đất để khám phá</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">Economic Crystal cần thu thập</div></div>
+      <div class="stat"><div class="n">100%</div><div class="l">Đồ họa &amp; âm thanh sinh bằng code</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="vung-dat">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Bản đồ hành trình</span>
+      <h2>Năm vùng đất kinh tế</h2>
+      <p>Mỗi vùng là một chương lý luận — từ cạnh tranh sơ khai đến cuộc đối đầu với “Vua Độc Quyền”.</p>
+    </div>
+
+    <div class="region">
+      <div class="region-txt">
+        <div class="num">VÙNG 01</div>
+        <h3>Chợ Muôn Bàn Tay</h3>
+        <div class="en">Market of Many Hands</div>
+        <p>Hàng chục sạp hàng giành khách — giảm giá, nâng chất lượng. Nơi người chơi làm quen với
+          bản chất của <b>cạnh tranh</b> trong nền kinh tế thị trường.</p>
+        <span class="concept">Khái niệm: Cạnh tranh</span>
+      </div>
+      <div class="frame"><img loading="lazy" src="assets/region-1-market.png" alt="Chợ Muôn Bàn Tay"></div>
+    </div>
+
+    <div class="region">
+      <div class="region-txt">
+        <div class="num">VÙNG 02</div>
+        <h3>Thị Trấn Guild</h3>
+        <div class="en">Guild Town</div>
+        <p>Các xưởng dệt nhỏ bị thâu tóm, liên minh lớn hình thành. Minh họa <b>tích tụ &amp; tập trung
+          sản xuất</b> — con đường từ cạnh tranh dẫn tới độc quyền.</p>
+        <span class="concept">Khái niệm: Tích tụ → Độc quyền</span>
+      </div>
+      <div class="frame"><img loading="lazy" src="assets/region-2-guild.png" alt="Thị Trấn Guild"></div>
+    </div>
+
+    <div class="region">
+      <div class="region-txt">
+        <div class="num">VÙNG 03</div>
+        <h3>Ngân Thành</h3>
+        <div class="en">Bank of Interests</div>
+        <p>Vốn ngân hàng và vốn sản xuất hợp thành một khối quyền lực, dòng vốn chảy ra hải ngoại.
+          Vùng đất của <b>tư bản tài chính &amp; xuất khẩu tư bản</b>.</p>
+        <span class="concept">Khái niệm: Tư bản tài chính · Xuất khẩu tư bản</span>
+      </div>
+      <div class="frame"><img loading="lazy" src="assets/region-3-bank.png" alt="Ngân Thành"></div>
+    </div>
+
+    <div class="region">
+      <div class="region-txt">
+        <div class="num">VÙNG 04</div>
+        <h3>Thung Lũng Ảo Ảnh</h3>
+        <div class="en">Valley of Market Illusions</div>
+        <p>Nơi hai ngộ nhận cực đoan về thị trường bị bóc trần. Người chơi học cách <b>bắt lỗi lập luận</b>
+          và hiểu vì sao thị trường cần được điều tiết.</p>
+        <span class="concept">Khái niệm: Phá ngộ nhận · Vai trò điều tiết</span>
+      </div>
+      <div class="frame"><img loading="lazy" src="assets/region-4-valley.png" alt="Thung Lũng Ảo Ảnh"></div>
+    </div>
+
+    <div class="region">
+      <div class="region-txt">
+        <div class="num">VÙNG 05</div>
+        <h3>Cung Điện Điều Tiết</h3>
+        <div class="en">Palace of Regulation</div>
+        <p>Cuộc đối đầu cuối cùng với <b>Solandor — Vua Độc Quyền</b>, không phải bằng vũ lực mà bằng
+          những câu hỏi phản biện sắc bén về vai trò điều tiết của Nhà nước.</p>
+        <span class="concept">Khái niệm: Điều tiết của Nhà nước · Boss cuối</span>
+      </div>
+      <div class="frame"><img loading="lazy" src="assets/region-5-palace.png" alt="Cung Điện Điều Tiết"></div>
+    </div>
+  </div>
+</section>
+
+<section id="loi-choi">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Lối chơi</span>
+      <h2>Vừa phiêu lưu, vừa phản biện</h2>
+    </div>
+    <div class="features">
+      <div class="feat"><div class="ic">💬</div><h4>Hội thoại &amp; trắc nghiệm</h4>
+        <p>Trò chuyện với từng NPC, trả lời câu hỏi phản biện để mở khóa tri thức và tiến bước.
+          Có thể quay lại câu thoại trước bất cứ lúc nào.</p></div>
+      <div class="feat"><div class="ic">🧩</div><h4>Câu đố ở bệ đá cổ</h4>
+        <p>Ba dạng thử thách: phân loại tình huống, sắp xếp trình tự, và bắt lỗi ngộ nhận thị trường.</p></div>
+      <div class="feat"><div class="ic">👑</div><h4>Đấu trí với Boss</h4>
+        <p>Hạ gục “Vua Độc Quyền” bằng lý lẽ qua từng vòng đối đáp — chiến thắng của tư duy phản biện.</p></div>
+      <div class="feat"><div class="ic">🎨</div><h4>Đồ họa procedural</h4>
+        <p>Pixel-art HD-2D vẽ 100% bằng code: ánh sáng 2D, bóng đổ, hậu kỳ URP — không một file ảnh ngoài.</p></div>
+      <div class="feat"><div class="ic">📓</div><h4>Nhật ký &amp; túi đồ</h4>
+        <p>Mỗi khái niệm học được lưu vào Nhật ký kiến thức; vật phẩm thu thập nằm trong túi đồ.</p></div>
+      <div class="feat"><div class="ic">🌍</div><h4>Thế giới sống động</h4>
+        <p>Dân làng đi lại, gà–chó–bò–cừu, đồng ruộng, cây lá xanh &amp; lá hồng — 5 vùng đất “có hồn”.</p></div>
+    </div>
+    <div style="margin-top:34px" class="frame"><img loading="lazy" src="assets/gameplay-quiz.png" alt="Câu đố trắc nghiệm ở bệ đá"></div>
+  </div>
+</section>
+
+<section id="thong-diep">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Điểm nhấn sư phạm</span>
+      <h2>Thông điệp của game</h2>
+    </div>
+    <div class="message">
+      <p class="quote">Cạnh tranh sinh ra độc quyền, nhưng độc quyền không thủ tiêu cạnh tranh mà làm nó
+        trở nên đa dạng và gay gắt hơn — đây là quy luật thống nhất và đấu tranh khách quan. Nhà nước,
+        qua vai trò điều tiết, không xóa bỏ quy luật này mà định hướng nó để phát triển hài hòa xã hội.”</p>
+      <div class="misconceptions">
+        <div class="mis"><span class="x">✕ NGỘ NHẬN 1</span>
+          <p>“Độc quyền lúc nào cũng xấu, phải xóa bỏ hoàn toàn.”</p>
+          <small>→ Sai: độc quyền là kết quả tất yếu của cạnh tranh phát triển cao, chỉ có thể điều tiết.</small></div>
+        <div class="mis"><span class="x">✕ NGỘ NHẬN 2</span>
+          <p>“Cứ để thị trường tự do tuyệt đối, không cần ai can thiệp.”</p>
+          <small>→ Sai: thiếu điều tiết, kẻ mạnh sẽ chèn ép kẻ yếu và độc quyền mới liên tục hình thành.</small></div>
+      </div>
+      <p class="verdict">⚖ Cần điều tiết hợp lý — gắn với kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam.</p>
+    </div>
+  </div>
+</section>
+
+<section id="anh">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Thư viện ảnh</span>
+      <h2>Thế giới Econia</h2>
+    </div>
+    <div class="gallery">
+      <div class="frame"><img loading="lazy" src="assets/region-2-guild.png" alt="Thị Trấn Guild"></div>
+      <div class="frame"><img loading="lazy" src="assets/region-3-bank.png" alt="Ngân Thành"></div>
+      <div class="frame"><img loading="lazy" src="assets/region-4-valley.png" alt="Thung Lũng Ảo Ảnh"></div>
+      <div class="frame"><img loading="lazy" src="assets/region-5-palace.png" alt="Cung Điện"></div>
+    </div>
+  </div>
+</section>
+
+<section id="tai-game">
+  <div class="wrap">
+    <div class="download">
+      <span class="kicker">Sẵn sàng lên đường?</span>
+      <h2>Tải Kinh Tế Giới</h2>
+      <p style="color:var(--muted);max-width:38em;margin:0 auto">Bản chạy độc lập cho Windows —
+        giải nén và chạy <span class="mono">KinhTeGioi.exe</span>, không cần cài đặt.</p>
+      <div class="dl-meta">
+        <span><b>Nền tảng:</b> Windows 64-bit</span>
+        <span><b>Dung lượng:</b> ~72 MB</span>
+        <span><b>Engine:</b> Unity · URP</span>
+      </div>
+      <div style="margin-top:22px"><a href="game/KinhTeGioi-Windows.zip" class="btn" style="font-size:1.05rem;padding:15px 34px">⬇ Tải bản Windows (.zip)</a></div>
+
+      <div class="controls">
+        <div class="key"><kbd>WASD</kbd> Di chuyển</div>
+        <div class="key"><kbd>E</kbd> / <kbd>Space</kbd> Tương tác</div>
+        <div class="key"><kbd>Q</kbd> Câu thoại trước</div>
+        <div class="key"><kbd>I</kbd> Túi đồ</div>
+        <div class="key"><kbd>J</kbd> Nhật ký</div>
+        <div class="key"><kbd>Esc</kbd> Tạm dừng</div>
+      </div>
+      <p class="note">💡 Nhớ giữ nguyên cả thư mục sau khi giải nén — <span class="mono">KinhTeGioi.exe</span>
+        cần đi kèm thư mục <span class="mono">KinhTeGioi_Data</span> và <span class="mono">UnityPlayer.dll</span> mới chạy được.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div><span class="brand" style="font-size:.95rem"><span class="gem"></span> KINH TẾ <b>GIỚI</b></span>
+      <span style="margin-left:12px">— Econia</span></div>
+    <div>Game giáo dục · Kinh tế Chính trị Mác–Lênin · Chương Độc quyền</div>
+  </div>
+</footer>
+
+</body>
+</html>

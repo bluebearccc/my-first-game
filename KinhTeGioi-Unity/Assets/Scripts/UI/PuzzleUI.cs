@@ -31,7 +31,7 @@ namespace KTG
 
         public void Build()
         {
-            var img = UIFactory.CreatePanel(transform, "Panel", new Vector2(920, 480), PanelFill, PanelBorder);
+            var img = UIFactory.CreatePanel(transform, "Panel", new Vector2(960, 560), PanelFill, PanelBorder);
             UIFactory.SetAnchor(img.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero);
             panel = img.gameObject;
 
@@ -47,7 +47,7 @@ namespace KTG
             var contentGO = new GameObject("Content", typeof(RectTransform));
             contentRoot = contentGO.transform;
             contentRoot.SetParent(panel.transform, false);
-            UIFactory.SetAnchor((RectTransform)contentRoot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 10));
+            UIFactory.SetAnchor((RectTransform)contentRoot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, -6));
 
             gameObject.SetActive(false);
         }
@@ -90,19 +90,21 @@ namespace KTG
             ClearContent();
             if (classifyIndex >= classifyShuffled.Count) { Succeed(); return; }
 
+            // Neo theo TÂM: câu cần phân loại ở trên, các nút nhóm ở dưới.
             var item = classifyShuffled[classifyIndex];
-            var label = UIFactory.CreateText(contentRoot, "Item", item.Label, 20, Ink, TextAnchor.MiddleCenter, new Vector2(760, 80));
-            UIFactory.SetAnchor(label.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0, 0));
+            var label = UIFactory.CreateText(contentRoot, "Item", item.Label, 19, Ink, TextAnchor.MiddleCenter, new Vector2(860, 96));
+            UIFactory.SetAnchor(label.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 60));
 
             int count = current.Categories.Count;
-            const int w = 220;
-            int totalW = count * (w + 20) - 20;
+            const int w = 250;
+            const int gap = 24;
+            int totalW = count * (w + gap) - gap;
             float startX = -totalW / 2f + w / 2f;
             for (int i = 0; i < count; i++)
             {
                 var cat = current.Categories[i];
-                var btn = UIFactory.CreateButton(contentRoot, "Cat" + i, cat, new Vector2(w, 48), () => PickClassify(cat));
-                UIFactory.SetAnchor(btn.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(startX + i * (w + 20), -60));
+                var btn = UIFactory.CreateButton(contentRoot, "Cat" + i, cat, new Vector2(w, 58), () => PickClassify(cat), 18);
+                UIFactory.SetAnchor(btn.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(startX + i * (w + gap), -60));
             }
         }
 
@@ -136,14 +138,16 @@ namespace KTG
         {
             ClearContent();
 
-            var chosenText = UIFactory.CreateText(contentRoot, "Chosen", ChosenLines(), 15, Cyan, TextAnchor.UpperLeft, new Vector2(760, 130));
-            UIFactory.SetAnchor(chosenText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0, 0));
+            // Neo theo TÂM: danh sách đã sắp ở trên, các bước còn lại ở dưới.
+            var chosenText = UIFactory.CreateText(contentRoot, "Chosen", ChosenLines(), 16, Cyan, TextAnchor.UpperLeft, new Vector2(860, 110));
+            UIFactory.SetAnchor(chosenText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 1f), new Vector2(0, 190));
 
+            const float stepTop = 30f, stepSpacing = 64f;
             for (int i = 0; i < orderRemaining.Count; i++)
             {
                 var step = orderRemaining[i];
-                var btn = UIFactory.CreateButton(contentRoot, "Step" + i, step, new Vector2(740, 32), () => PickOrder(step));
-                UIFactory.SetAnchor(btn.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0, i * 38));
+                var btn = UIFactory.CreateButton(contentRoot, "Step" + i, step, new Vector2(860, 54), () => PickOrder(step), 16);
+                UIFactory.SetAnchor(btn.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, stepTop - i * stepSpacing));
             }
         }
 
@@ -185,14 +189,18 @@ namespace KTG
             if (quizIndex >= current.Quiz.Count) { Succeed(); return; }
             var q = current.Quiz[quizIndex];
 
-            var stmt = UIFactory.CreateText(contentRoot, "Statement", q.Statement, 19, Ink, TextAnchor.MiddleCenter, new Vector2(760, 60));
-            UIFactory.SetAnchor(stmt.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0, 0));
+            // Bố cục top-down, neo theo TÂM content (độc lập kích thước contentRoot):
+            // câu hỏi ở trên, 3 đáp án xếp xuống dưới, không chồng nhau.
+            var stmt = UIFactory.CreateText(contentRoot, "Statement", q.Statement, 19, Ink, TextAnchor.MiddleCenter, new Vector2(860, 60));
+            stmt.fontStyle = FontStyle.Bold;
+            UIFactory.SetAnchor(stmt.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 135));
 
+            const float optTop = 60f, optSpacing = 76f;
             for (int i = 0; i < q.Options.Count; i++)
             {
                 int idx = i;
-                var btn = UIFactory.CreateButton(contentRoot, "Opt" + i, q.Options[i], new Vector2(740, 40), () => PickQuiz(idx));
-                UIFactory.SetAnchor(btn.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0, i * 46));
+                var btn = UIFactory.CreateButton(contentRoot, "Opt" + i, q.Options[i], new Vector2(860, 62), () => PickQuiz(idx), 16);
+                UIFactory.SetAnchor(btn.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, optTop - i * optSpacing));
             }
         }
 

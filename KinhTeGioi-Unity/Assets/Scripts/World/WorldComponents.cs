@@ -37,6 +37,7 @@ namespace KTG
         public void Apply()
         {
             if (target == null || cam == null || MapBuilder.Width <= 0) return;
+            if (Hd2dView.Diorama) { ApplyDiorama(); return; }
             UpdatePixelPerfectSize();
             float vert = cam.orthographicSize;
             float horz = vert * cam.aspect;
@@ -62,6 +63,37 @@ namespace KTG
                 y += (Mathf.PerlinNoise(0.7f, Time.time * 45f) - 0.5f) * 2f * k;
             }
             transform.position = new Vector3(x, y, transform.position.z);
+        }
+
+        // Phase D3: camera phoi canh nghieng — clamp theo footprint gan dung tai mat dat,
+        // khong pixel-snap (phoi canh khong co luoi texel co dinh de bam).
+        void ApplyDiorama()
+        {
+            cam.orthographic = false;
+            cam.fieldOfView = Hd2dView.Fov;
+
+            float vert = Hd2dView.Dist * Mathf.Tan(Hd2dView.Fov * 0.5f * Mathf.Deg2Rad);
+            float horz = vert * cam.aspect;
+
+            float minX = horz, maxX = MapBuilder.Width - horz;
+            float minY = -MapBuilder.Height + vert, maxY = -vert;
+            if (minX > maxX) { float mid = (minX + maxX) * 0.5f; minX = maxX = mid; }
+            if (minY > maxY) { float mid = (minY + maxY) * 0.5f; minY = maxY = mid; }
+
+            float x = Mathf.Clamp(target.position.x, minX, maxX);
+            float y = Mathf.Clamp(target.position.y, minY, maxY);
+
+            if (shakeTime > 0f)
+            {
+                shakeTime -= Time.deltaTime;
+                float k = shakeAmp * Mathf.Clamp01(shakeTime / shakeDur);
+                x += (Mathf.PerlinNoise(Time.time * 45f, 0.3f) - 0.5f) * 2f * k;
+                y += (Mathf.PerlinNoise(0.7f, Time.time * 45f) - 0.5f) * 2f * k;
+            }
+
+            var focus = new Vector3(x, y, 0f);
+            transform.rotation = Hd2dView.Rot;
+            transform.position = focus - Hd2dView.Rot * Vector3.forward * Hd2dView.Dist;
         }
     }
 
@@ -218,23 +250,32 @@ namespace KTG
         }
     }
 
-    // Nhap nhay quang duoc (glow child sprite) bang Perlin noise.
+    // Nhap nhay quang duoc (glow child sprite + Light2D that) bang Perlin noise.
     public class TorchFlicker : MonoBehaviour
     {
         public SpriteRenderer Glow;
+        public UnityEngine.Rendering.Universal.Light2D Light; // Phase B: den that nhap nhay cung glow
         float seed;
+        float lightBase = -1f;
 
         void Awake() { seed = Random.Range(0f, 100f); }
 
         void Update()
         {
-            if (Glow == null) return;
             float n = Mathf.PerlinNoise(Time.time * 6f + seed, 0f);
-            var c = Glow.color;
-            c.a = 0.55f + n * 0.35f;
-            Glow.color = c;
-            float s = 0.9f + n * 0.25f;
-            Glow.transform.localScale = new Vector3(s, s, 1f);
+            if (Glow != null)
+            {
+                var c = Glow.color;
+                c.a = 0.55f + n * 0.35f;
+                Glow.color = c;
+                float s = 0.9f + n * 0.25f;
+                Glow.transform.localScale = new Vector3(s, s, 1f);
+            }
+            if (Light != null)
+            {
+                if (lightBase < 0f) lightBase = Light.intensity;
+                Light.intensity = lightBase * (0.8f + n * 0.4f);
+            }
         }
     }
 
@@ -296,48 +337,54 @@ namespace KTG
         }
     }
 
-    // Con vat di lang thang ngau nhien trong pham vi nho, ton trong o bi chan.
-    // Kind: 0 = ga (cham, mo thoc), 1 = cho (nhanh, vay duoi)
-    public class AnimalWander : MonoBehaviour
+    public enum AnimalKind { Chicken, Dog, Cow, Sheep, Pig, Cat }
+
+    // Dan lang di lang thang trang tri (khong tuong tac/khong thoai): buoc frame 1/2 khi di,
+    // tho nhe frame 0/3 khi dung, quay mat theo huong di chuyen. Tai su dung logic tim o trong
+    // giong AnimalWander nhung ban kinh rong hon (dan lang di dao pho).
+    public class VillagerWander : MonoBehaviour
     {
-        public int Kind;
+        public Color Hair, Skin, Shirt;
+        public Color Pants = new Color(0.3f, 0.28f, 0.35f);
 
         SpriteRenderer sr;
         Vector3 target;
-        float speed;
-        float frameT;
-        int frame;
+        const float Speed = 0.9f;
+        const int Radius = 3;
         float pauseT;
+        float walkFrameT;
+        int walkFrame;
+        int facing;
+        bool flip;
+        float breathePhase;
 
         void Awake()
         {
             sr = GetComponent<SpriteRenderer>();
             target = transform.position;
-            speed = Kind == 0 ? 0.7f : 1.3f;
             pauseT = Random.Range(0f, 2f);
+            breathePhase = Random.Range(0f, 4f);
         }
 
         void Update()
         {
-            // animation 2 frame
-            frameT += Time.deltaTime;
-            if (frameT > (Kind == 0 ? 0.45f : 0.3f))
-            {
-                frameT = 0f;
-                frame = 1 - frame;
-                sr.sprite = Kind == 0 ? PixelArt.Chicken(frame) : PixelArt.Dog(frame);
-            }
-
-            if (pauseT > 0f) { pauseT -= Time.deltaTime; return; }
-
             Vector3 d = target - transform.position;
-            if (d.magnitude < 0.06f)
+            bool moving = pauseT <= 0f && d.magnitude >= 0.06f;
+
+            walkFrameT += Time.deltaTime;
+            if (walkFrameT > 0.28f) { walkFrameT = 0f; walkFrame = 1 - walkFrame; }
+
+            if (pauseT > 0f)
             {
-                pauseT = Random.Range(0.6f, 2.8f);
+                pauseT -= Time.deltaTime;
+            }
+            else if (d.magnitude < 0.06f)
+            {
+                pauseT = Random.Range(1.5f, 4f);
                 var c = MapBuilder.WorldToCell(transform.position + new Vector3(0f, 0.3f, 0f));
                 for (int i = 0; i < 8; i++)
                 {
-                    var nc = c + new Vector2Int(Random.Range(-2, 3), Random.Range(-2, 3));
+                    var nc = c + new Vector2Int(Random.Range(-Radius, Radius + 1), Random.Range(-Radius, Radius + 1));
                     if (nc != c && MapBuilder.IsWalkable(nc))
                     {
                         target = MapBuilder.CellToWorld(nc) - new Vector3(0f, 0.5f, 0f);
@@ -347,10 +394,107 @@ namespace KTG
             }
             else
             {
-                transform.position += d.normalized * speed * Time.deltaTime;
+                facing = Mathf.Abs(d.x) > Mathf.Abs(d.y) ? 2 : (d.y > 0f ? 1 : 0);
+                if (facing == 2) flip = d.x < 0f;
+                transform.position += d.normalized * Speed * Time.deltaTime;
+                sr.sortingOrder = Mathf.RoundToInt(-transform.position.y * 10f);
+            }
+
+            int frame = moving ? (1 + walkFrame) : (((Time.time + breathePhase) % 2.4f) > 1.2f ? 3 : 0);
+            sr.sprite = PixelArt.Character(Hair, Skin, Shirt, Pants, moving ? facing : 0, frame);
+            sr.flipX = moving && facing == 2 && flip;
+        }
+    }
+
+    // Con vat di lang thang ngau nhien trong pham vi nho, ton trong o bi chan.
+    // Moi loai co bang cau hinh rieng (frame, toc do, thoi gian dung...) de de mo rong.
+    public class AnimalWander : MonoBehaviour
+    {
+        public AnimalKind Kind;
+
+        struct Cfg
+        {
+            public int frames;
+            public float frameDur;
+            public float speed;
+            public float pauseMin, pauseMax;
+            public int radius;
+            public System.Func<int, Sprite> sprite;
+        }
+
+        static readonly Dictionary<AnimalKind, Cfg> cfgs = new Dictionary<AnimalKind, Cfg>
+        {
+            { AnimalKind.Chicken, new Cfg { frames = 4, frameDur = 0.35f, speed = 0.7f, pauseMin = 0.6f, pauseMax = 2.8f, radius = 2, sprite = PixelArt.Chicken } },
+            { AnimalKind.Dog,     new Cfg { frames = 4, frameDur = 0.16f, speed = 1.4f, pauseMin = 0.4f, pauseMax = 2.0f, radius = 3, sprite = PixelArt.Dog } },
+            { AnimalKind.Cow,     new Cfg { frames = 2, frameDur = 0.6f,  speed = 0.4f, pauseMin = 1.5f, pauseMax = 4.0f, radius = 2, sprite = PixelArt.Cow } },
+            { AnimalKind.Sheep,   new Cfg { frames = 2, frameDur = 0.6f,  speed = 0.45f,pauseMin = 1.2f, pauseMax = 3.5f, radius = 2, sprite = PixelArt.Sheep } },
+            { AnimalKind.Pig,     new Cfg { frames = 2, frameDur = 0.5f,  speed = 0.6f, pauseMin = 1.0f, pauseMax = 3.0f, radius = 2, sprite = PixelArt.Pig } },
+            { AnimalKind.Cat,     new Cfg { frames = 2, frameDur = 0.9f,  speed = 0.8f, pauseMin = 1.8f, pauseMax = 4.5f, radius = 2, sprite = PixelArt.Cat } },
+        };
+
+        SpriteRenderer sr;
+        Cfg cfg;
+        Vector3 target;
+        float frameT;
+        int frame;
+        float pauseT;
+
+        void Awake()
+        {
+            sr = GetComponent<SpriteRenderer>();
+            cfg = cfgs[Kind];
+            target = transform.position;
+            pauseT = Random.Range(0f, 2f);
+        }
+
+        void Update()
+        {
+            frameT += Time.deltaTime;
+            if (frameT > cfg.frameDur)
+            {
+                frameT = 0f;
+                frame = (frame + 1) % cfg.frames;
+                sr.sprite = cfg.sprite(frame);
+            }
+
+            if (pauseT > 0f) { pauseT -= Time.deltaTime; return; }
+
+            Vector3 d = target - transform.position;
+            if (d.magnitude < 0.06f)
+            {
+                pauseT = Random.Range(cfg.pauseMin, cfg.pauseMax);
+                var c = MapBuilder.WorldToCell(transform.position + new Vector3(0f, 0.3f, 0f));
+                for (int i = 0; i < 8; i++)
+                {
+                    var nc = c + new Vector2Int(Random.Range(-cfg.radius, cfg.radius + 1), Random.Range(-cfg.radius, cfg.radius + 1));
+                    if (nc != c && MapBuilder.IsWalkable(nc))
+                    {
+                        target = MapBuilder.CellToWorld(nc) - new Vector3(0f, 0.5f, 0f);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                transform.position += d.normalized * cfg.speed * Time.deltaTime;
                 if (Mathf.Abs(d.x) > 0.05f) sr.flipX = d.x < 0f;
                 sr.sortingOrder = Mathf.RoundToInt(-transform.position.y * 10f);
             }
+        }
+    }
+
+    // Dung dua nhe ngon cay trong theo gio (nghieng quanh pivot day, lech pha ngau nhien).
+    public class CropSway : MonoBehaviour
+    {
+        public float Amplitude = 4f; // do nghieng toi da (Euler Z)
+        public float Speed = 1.6f;
+        float phase;
+
+        void Awake() { phase = Random.Range(0f, Mathf.PI * 2f); }
+
+        void Update()
+        {
+            transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Sin(Time.time * Speed + phase) * Amplitude);
         }
     }
 

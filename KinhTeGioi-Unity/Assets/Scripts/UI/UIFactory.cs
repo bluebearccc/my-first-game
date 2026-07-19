@@ -37,6 +37,9 @@ namespace KTG
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1280, 720);
             scaler.matchWidthOrHeight = 0.5f;
+            // Raster glyph Text va hinh 9-slice Wood9 o mat do gap doi -> chu/vien UI sac net hon,
+            // dac biet khi cua so chay gan do phan giai tham chieu 1280x720. Chi phi ~0.
+            scaler.dynamicPixelsPerUnit = 2f;
             return canvas;
         }
 
@@ -96,7 +99,7 @@ namespace KTG
             return txt;
         }
 
-        public static Button CreateButton(Transform parent, string name, string label, Vector2 size, System.Action onClick)
+        public static Button CreateButton(Transform parent, string name, string label, Vector2 size, System.Action onClick, int fontSize = 20)
         {
             var img = CreatePanel(parent, name, size, new Color(0.14f, 0.16f, 0.26f, 0.95f), new Color(0.85f, 0.7f, 0.3f, 1f));
             var btn = img.gameObject.AddComponent<Button>();
@@ -106,8 +109,11 @@ namespace KTG
             colors.pressedColor = new Color(0.68f, 0.64f, 0.58f, 1f);
             btn.colors = colors;
 
-            var txt = CreateText(img.transform, "Label", label, 20, new Color(0.95f, 0.92f, 0.82f), TextAnchor.MiddleCenter, size);
+            var txt = CreateText(img.transform, "Label", label, fontSize, new Color(0.95f, 0.92f, 0.82f), TextAnchor.MiddleCenter, size);
             Stretch(txt.rectTransform);
+            // Chua le trong: chu khong cham vien go, nam gon trong o va de doc hon
+            txt.rectTransform.offsetMin = new Vector2(14, 4);
+            txt.rectTransform.offsetMax = new Vector2(-14, -4);
             txt.raycastTarget = false;
 
             if (onClick != null) btn.onClick.AddListener(() => onClick());

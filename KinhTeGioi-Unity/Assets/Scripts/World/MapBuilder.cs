@@ -59,6 +59,11 @@ namespace KTG
                         w.gameObject.AddComponent<WaterAnim>();
                         walkable = false;
                     }
+                    else if (ch == '=')
+                    {
+                        SpawnTile(root, pos, PixelArt.TilledSoil(x * 17 + y * 23), -10000);
+                        walkable = false;
+                    }
                     else
                     {
                         var groundColor = ch == ',' ? map.Grass : map.Ground;
@@ -87,9 +92,20 @@ namespace KTG
                     switch (ch)
                     {
                         case 'T':
-                            SpawnProp(root, pos, PixelArt.Tree(new Color(0.25f, 0.5f, 0.25f), new Color(0.4f, 0.28f, 0.18f)));
+                        {
+                            var tree = SpawnProp(root, pos, PixelArt.Tree(new Color(0.25f, 0.5f, 0.25f), new Color(0.4f, 0.28f, 0.18f)));
+                            Shadow2D.AddCaster(tree.gameObject, 0.9f, 0.4f);
                             walkable = false;
                             break;
+                        }
+
+                        case 'Y': // cay la hong (anh dao) — bien the mau cua 'T'
+                        {
+                            var pink = SpawnProp(root, pos, PixelArt.Tree(new Color(0.93f, 0.58f, 0.72f), new Color(0.42f, 0.29f, 0.2f)));
+                            Shadow2D.AddCaster(pink.gameObject, 0.9f, 0.4f);
+                            walkable = false;
+                            break;
+                        }
 
                         case 't':
                         {
@@ -101,7 +117,11 @@ namespace KTG
                             var glowSr = glowGO.AddComponent<SpriteRenderer>();
                             glowSr.sprite = PixelArt.Glow(flame, 64);
                             glowSr.sortingOrder = torch.sortingOrder - 1;
-                            torch.gameObject.AddComponent<TorchFlicker>().Glow = glowSr;
+                            var torchFlicker = torch.gameObject.AddComponent<TorchFlicker>();
+                            torchFlicker.Glow = glowSr;
+                            // Vung sang am quanh duoc — nhap nhay cung glow (Phase B); Phase D1: co bong dong
+                            torchFlicker.Light = Lighting2D.AddPoint(torch.transform, new Vector3(0f, 0.9f, 0f), flame, 3f, 1.1f, castShadows: true);
+                            Shadow2D.AddCaster(torch.gameObject, 0.3f, 0.2f);
                             walkable = false;
                             break;
                         }
@@ -115,36 +135,55 @@ namespace KTG
                             var csr = crystalGO.AddComponent<SpriteRenderer>();
                             csr.sprite = PixelArt.Crystal(crystalHere ? new Color(0.5f, 0.9f, 1f) : new Color(0.45f, 0.45f, 0.55f, 0.6f));
                             csr.sortingOrder = pedestal.sortingOrder + 1;
+                            Hd2dView.StandUp(crystalGO.transform);
                             crystalGO.AddComponent<Bobber>().Amplitude = 0.06f;
+                            if (crystalHere)
+                                Lighting2D.AddPoint(crystalGO.transform, Vector3.zero, new Color(0.5f, 0.9f, 1f), 2.5f, 1f, castShadows: true);
                             Interactables[cell] = new InteractableInfo(InteractableKind.Pedestal, '*');
                             walkable = false;
                             break;
                         }
 
                         case 's':
-                            SpawnProp(root, pos, PixelArt.Stall(new Color(0.7f, 0.3f, 0.25f)));
+                        {
+                            var stall = SpawnProp(root, pos, PixelArt.Stall(new Color(0.7f, 0.3f, 0.25f)));
+                            Shadow2D.AddCaster(stall.gameObject, 1f, 0.4f);
                             walkable = false;
                             break;
+                        }
 
                         case 'o':
-                            SpawnProp(root, pos, PixelArt.Coral(new Color(0.6f, 0.3f, 0.8f), x * 7 + y * 11));
+                        {
+                            var coral = SpawnProp(root, pos, PixelArt.Coral(new Color(0.6f, 0.3f, 0.8f), x * 7 + y * 11));
+                            // Nam huyen ao phat sang nhe (Phase B)
+                            Lighting2D.AddPoint(coral.transform, new Vector3(0f, 0.4f, 0f), new Color(0.7f, 0.45f, 0.95f), 1.5f, 0.5f);
                             walkable = false;
                             break;
+                        }
 
                         case 'b':
-                            SpawnProp(root, pos, PixelArt.Barrel());
+                        {
+                            var barrel = SpawnProp(root, pos, PixelArt.Barrel());
+                            Shadow2D.AddCaster(barrel.gameObject, 0.5f, 0.3f);
                             walkable = false;
                             break;
+                        }
 
                         case 'c':
-                            SpawnProp(root, pos, PixelArt.Crate());
+                        {
+                            var crate = SpawnProp(root, pos, PixelArt.Crate());
+                            Shadow2D.AddCaster(crate.gameObject, 0.6f, 0.3f);
                             walkable = false;
                             break;
+                        }
 
                         case 'r':
-                            SpawnProp(root, pos, PixelArt.Rock(x * 5 + y * 13));
+                        {
+                            var rock = SpawnProp(root, pos, PixelArt.Rock(x * 5 + y * 13));
+                            Shadow2D.AddCaster(rock.gameObject, 0.6f, 0.3f);
                             walkable = false;
                             break;
+                        }
 
                         case 'u':
                             SpawnProp(root, pos, PixelArt.Bush(Color.Lerp(map.Grass, new Color(0.2f, 0.5f, 0.25f), 0.5f), x * 3 + y * 19));
@@ -152,20 +191,29 @@ namespace KTG
                             break;
 
                         case 'w':
-                            SpawnProp(root, pos, PixelArt.Well());
+                        {
+                            var well = SpawnProp(root, pos, PixelArt.Well());
+                            Shadow2D.AddCaster(well.gameObject, 0.8f, 0.4f);
                             walkable = false;
                             break;
+                        }
 
                         case 'n':
-                            SpawnProp(root, pos, PixelArt.Sign());
+                        {
+                            var sign = SpawnProp(root, pos, PixelArt.Sign());
+                            Shadow2D.AddCaster(sign.gameObject, 0.3f, 0.2f);
                             walkable = false;
                             break;
+                        }
 
                         case 'H':
                         {
                             // Nha rong 3 o, cao 2 o: chan them cac o xung quanh o neo
                             var roofC = Color.Lerp(map.Ground, new Color(0.72f, 0.28f, 0.22f), 0.65f);
-                            SpawnProp(root, pos, PixelArt.House(new Color(0.87f, 0.80f, 0.64f), roofC));
+                            var house = SpawnProp(root, pos, PixelArt.House(new Color(0.87f, 0.80f, 0.64f), roofC));
+                            // Cua so nha hat anh sang vang am nho (Phase B) — den trang tri, KHONG bat shadow (D1)
+                            Lighting2D.AddPoint(house.transform, new Vector3(0f, 0.7f, 0f), new Color(1f, 0.85f, 0.5f), 1.8f, 0.7f);
+                            Shadow2D.AddCaster(house.gameObject, 2.6f, 0.6f);
                             walkable = false;
                             extraBlocked.Add(new Vector2Int(x - 1, y));
                             extraBlocked.Add(new Vector2Int(x + 1, y));
@@ -176,16 +224,76 @@ namespace KTG
                         }
 
                         case 'F':
-                            SpawnProp(root, pos, PixelArt.Fence());
+                        {
+                            var fence = SpawnProp(root, pos, PixelArt.Fence());
+                            Shadow2D.AddCaster(fence.gameObject, 1f, 0.15f);
                             walkable = false;
                             break;
+                        }
+
+                        case 'i':
+                        {
+                            var crop = SpawnProp(root, pos, PixelArt.Crop(mapIndex % 3, x * 5 + y * 13));
+                            crop.gameObject.AddComponent<CropSway>();
+                            walkable = false;
+                            break;
+                        }
+
+                        case 'j':
+                        {
+                            var scarecrow = SpawnProp(root, pos, PixelArt.Scarecrow());
+                            Shadow2D.AddCaster(scarecrow.gameObject, 0.8f, 0.3f);
+                            walkable = false;
+                            break;
+                        }
+
+                        case 'h':
+                        {
+                            var haystack = SpawnProp(root, pos, PixelArt.Haystack(x * 7 + y * 3));
+                            Shadow2D.AddCaster(haystack.gameObject, 0.9f, 0.3f);
+                            walkable = false;
+                            break;
+                        }
 
                         case 'k':
                         case 'd':
+                        case 'm':
+                        case 'e':
+                        case 'g':
+                        case 'y':
                         {
-                            var animal = SpawnProp(root, pos, ch == 'k' ? PixelArt.Chicken(0) : PixelArt.Dog(0));
-                            animal.gameObject.AddComponent<AnimalWander>().Kind = ch == 'k' ? 0 : 1;
+                            Sprite animalSpr; AnimalKind animalKind;
+                            switch (ch)
+                            {
+                                case 'k': animalSpr = PixelArt.Chicken(0); animalKind = AnimalKind.Chicken; break;
+                                case 'd': animalSpr = PixelArt.Dog(0); animalKind = AnimalKind.Dog; break;
+                                case 'm': animalSpr = PixelArt.Cow(0); animalKind = AnimalKind.Cow; break;
+                                case 'e': animalSpr = PixelArt.Sheep(0); animalKind = AnimalKind.Sheep; break;
+                                case 'g': animalSpr = PixelArt.Pig(0); animalKind = AnimalKind.Pig; break;
+                                default:  animalSpr = PixelArt.Cat(0); animalKind = AnimalKind.Cat; break;
+                            }
+                            var animal = SpawnProp(root, pos, animalSpr);
+                            animal.gameObject.AddComponent<AnimalWander>().Kind = animalKind;
                             break; // o van di duoc — con vat tu tranh duong
+                        }
+
+                        case 'V':
+                        {
+                            int vh = (x * 92821 ^ y * 68917 ^ mapIndex * 51137) & 0x7fffffff;
+                            var vr = new System.Random(vh);
+                            Color[] hairs = { new Color(0.15f, 0.1f, 0.08f), new Color(0.5f, 0.35f, 0.2f), new Color(0.75f, 0.68f, 0.55f), new Color(0.35f, 0.22f, 0.15f), new Color(0.6f, 0.55f, 0.5f) };
+                            Color[] skins = { new Color(0.85f, 0.65f, 0.5f), new Color(0.75f, 0.55f, 0.4f), new Color(0.9f, 0.72f, 0.58f) };
+                            Color[] shirts = { new Color(0.3f, 0.5f, 0.3f), new Color(0.5f, 0.25f, 0.2f), new Color(0.25f, 0.3f, 0.5f), new Color(0.55f, 0.45f, 0.2f), new Color(0.4f, 0.2f, 0.4f) };
+                            var vHair = hairs[vr.Next(hairs.Length)];
+                            var vSkin = skins[vr.Next(skins.Length)];
+                            var vShirt = shirts[vr.Next(shirts.Length)];
+                            var villager = SpawnProp(root, pos, PixelArt.Character(vHair, vSkin, vShirt, new Color(0.3f, 0.28f, 0.35f)));
+                            SpawnShadowAt(root, villager.transform.position, villager.sortingOrder);
+                            Shadow2D.AddCaster(villager.gameObject, 0.4f, 0.25f);
+                            var vw = villager.gameObject.AddComponent<VillagerWander>();
+                            vw.Hair = vHair; vw.Skin = vSkin; vw.Shirt = vShirt;
+                            // KHONG them Interactables — dan lang trang tri, khong thoai; o van di duoc
+                            break;
                         }
 
                         case 'L':
@@ -197,7 +305,9 @@ namespace KTG
                             var glowSr = glowGO.AddComponent<SpriteRenderer>();
                             glowSr.sprite = PixelArt.Glow(new Color(0.5f, 0.9f, 1f, 0.45f), 64);
                             glowSr.sortingOrder = spark.sortingOrder - 1;
-                            spark.gameObject.AddComponent<TorchFlicker>().Glow = glowSr;
+                            var sparkFlicker = spark.gameObject.AddComponent<TorchFlicker>();
+                            sparkFlicker.Glow = glowSr;
+                            sparkFlicker.Light = Lighting2D.AddPoint(spark.transform, new Vector3(0f, 0.35f, 0f), new Color(0.5f, 0.9f, 1f), 2f, 0.7f, castShadows: true);
                             Interactables[cell] = new InteractableInfo(InteractableKind.Lore, 'L');
                             walkable = false;
                             break;
@@ -208,6 +318,7 @@ namespace KTG
                             var boss = SpawnProp(root, pos, PixelArt.Character(new Color(0.15f, 0.1f, 0.15f), new Color(0.85f, 0.7f, 0.6f), new Color(0.5f, 0.15f, 0.55f), new Color(0.25f, 0.1f, 0.3f)));
                             boss.transform.localScale = Vector3.one * 1.6f;
                             SpawnShadowAt(root, boss.transform.position, boss.sortingOrder);
+                            Shadow2D.AddCaster(boss.gameObject, 0.5f, 0.25f);
                             var bossIdle = boss.gameObject.AddComponent<NpcIdle>();
                             bossIdle.Hair = new Color(0.15f, 0.1f, 0.15f);
                             bossIdle.Skin = new Color(0.85f, 0.7f, 0.6f);
@@ -219,14 +330,20 @@ namespace KTG
                         }
 
                         case '<':
+                        {
                             Interactables[cell] = new InteractableInfo(InteractableKind.PortalBack, '<');
-                            SpawnTile(root, pos, PixelArt.Glow(new Color(0.9f, 0.8f, 0.3f, 0.55f), 48), -8000);
+                            var pg = SpawnTile(root, pos, PixelArt.Glow(new Color(0.9f, 0.8f, 0.3f, 0.55f), 48), -8000, lit: false);
+                            Lighting2D.AddPoint(pg.transform, Vector3.zero, new Color(0.9f, 0.8f, 0.3f), 2f, 0.9f);
                             break;
+                        }
 
                         case '>':
+                        {
                             Interactables[cell] = new InteractableInfo(InteractableKind.PortalForward, '>');
-                            SpawnTile(root, pos, PixelArt.Glow(new Color(0.3f, 0.85f, 0.9f, 0.55f), 48), -8000);
+                            var pg = SpawnTile(root, pos, PixelArt.Glow(new Color(0.3f, 0.85f, 0.9f, 0.55f), 48), -8000, lit: false);
+                            Lighting2D.AddPoint(pg.transform, Vector3.zero, new Color(0.3f, 0.85f, 0.9f), 2f, 0.9f);
                             break;
+                        }
 
                         case 'P':
                             SpawnCell = cell;
@@ -237,6 +354,7 @@ namespace KTG
                             {
                                 var body = SpawnProp(root, pos, PixelArt.Character(npc.Hair, npc.Skin, npc.Shirt, new Color(0.3f, 0.28f, 0.35f)));
                                 SpawnShadowAt(root, body.transform.position, body.sortingOrder);
+                                Shadow2D.AddCaster(body.gameObject, 0.4f, 0.25f);
                                 var idle = body.gameObject.AddComponent<NpcIdle>();
                                 idle.Hair = npc.Hair; idle.Skin = npc.Skin; idle.Shirt = npc.Shirt;
                                 Interactables[cell] = new InteractableInfo(InteractableKind.Npc, ch);
@@ -254,13 +372,17 @@ namespace KTG
                 if (c.x >= 0 && c.x < Width && c.y >= 0 && c.y < Height)
                     Blocked[c.x, c.y] = true;
 
+            // Anh sang nen toan map (Phase B HD-2D) — mau/cuong do rieng tung vung
+            Lighting2D.AddGlobal(root, mapIndex);
+
             // Hieu ung moi truong (la bay / buom / dom dom) — con cua root, tu huy khi doi map
             var fxGO = new GameObject("AmbientFX");
             fxGO.transform.SetParent(root, false);
             fxGO.AddComponent<AmbientFX>().MapIndex = mapIndex;
         }
 
-        static SpriteRenderer SpawnTile(Transform root, Vector3 pos, Sprite sprite, int order)
+        // lit=false cho sprite tu phat sang (glow portal...) — giu unlit de khong bi ambient lam toi.
+        static SpriteRenderer SpawnTile(Transform root, Vector3 pos, Sprite sprite, int order, bool lit = true)
         {
             var go = new GameObject("tile");
             go.transform.SetParent(root, false);
@@ -268,6 +390,7 @@ namespace KTG
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.sortingOrder = order;
+            if (lit) Lighting2D.MakeLit(sr);
             return sr;
         }
 
@@ -280,6 +403,8 @@ namespace KTG
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.sortingOrder = Mathf.RoundToInt(-go.transform.position.y * 10f);
+            Lighting2D.MakeLit(sr);
+            Hd2dView.StandUp(go.transform); // D3: prop "dung day" theo goc camera diorama
             return sr;
         }
 

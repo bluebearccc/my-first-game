@@ -44,8 +44,20 @@ namespace KTG
             g.Set(4, 9, 'b'); g.Set(5, 9, 'c'); g.Set(22, 9, 'c'); g.Set(23, 9, 'b');
             // bui cay + bien chi duong
             g.Set(10, 2, 'u'); g.Set(16, 2, 'u'); g.Set(26, 7, 'n');
+            // them cay coi + bui co rim ban do (xanh 'T' / hong 'Y')
+            g.Set(9, 1, 'T'); g.Set(18, 1, 'T');
+            g.Set(5, 1, 'Y'); g.Set(22, 1, 'Y');
+            g.Set(1, 3, 'u'); g.Set(26, 3, 'u'); g.Set(1, 12, 'u'); g.Set(26, 12, 'u');
             // dong vat trong cho
             g.Set(10, 6, 'k'); g.Set(16, 6, 'k'); g.Set(13, 9, 'd');
+            g.Set(5, 5, 'm'); g.Set(23, 5, 'e'); g.Set(7, 12, 'g'); g.Set(19, 12, 'y');
+            // dong ruong trang tri canh hang rao (goc duoi trai/phai)
+            g.Set(3, 12, '='); g.Set(4, 12, '='); g.Set(5, 12, 'i');
+            g.Set(4, 11, 'j');
+            g.Set(22, 12, '='); g.Set(23, 12, 'i'); g.Set(24, 12, '=');
+            g.Set(23, 11, 'h');
+            // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
+            g.Set(17, 7, 'V'); g.Set(20, 4, 'D');
             // cau chuyen an giau o goc cho
             g.Set(2, 14, 'L');
             // be da, spawn, cong
@@ -75,6 +87,7 @@ namespace KTG
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Trưởng Chợ", Hair = new Color(0.5f, 0.35f, 0.2f), Skin = new Color(0.85f, 0.65f, 0.5f), Shirt = new Color(0.7f, 0.45f, 0.15f) };
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Dì Ba", Hair = new Color(0.15f, 0.1f, 0.1f), Skin = new Color(0.9f, 0.7f, 0.55f), Shirt = new Color(0.3f, 0.6f, 0.35f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Ông Muối Trắng", Hair = new Color(0.85f, 0.85f, 0.85f), Skin = new Color(0.8f, 0.62f, 0.5f), Shirt = new Color(0.85f, 0.85f, 0.95f) };
+            m.Npcs['D'] = new NpcDef { Code = 'D', Name = "Cậu Bé Bán Bánh", Hair = new Color(0.2f, 0.14f, 0.1f), Skin = new Color(0.87f, 0.68f, 0.53f), Shirt = new Color(0.75f, 0.55f, 0.2f) };
             return m;
         }
 
@@ -102,8 +115,18 @@ namespace KTG
             g.Set(3, 4, 'F'); g.Set(4, 4, 'F'); g.Set(23, 4, 'F'); g.Set(24, 4, 'F');
             // bui cay + bien
             g.Set(12, 2, 'u'); g.Set(15, 2, 'u'); g.Set(26, 7, 'n');
+            // them cay coi + bui co rim ban do (xanh 'T' / hong 'Y')
+            g.Set(5, 1, 'T'); g.Set(22, 1, 'T');
+            g.Set(9, 1, 'Y'); g.Set(18, 1, 'Y');
+            g.Set(1, 3, 'u'); g.Set(26, 3, 'u'); g.Set(1, 12, 'u'); g.Set(26, 12, 'u');
             // dong vat thi tran
             g.Set(11, 8, 'k'); g.Set(16, 9, 'd');
+            g.Set(17, 3, 'm'); g.Set(10, 6, 'e'); g.Set(24, 9, 'g'); g.Set(5, 11, 'y');
+            // dong ruong trang tri canh hang rao truoc nha
+            g.Set(2, 5, '='); g.Set(3, 5, 'i'); g.Set(2, 6, 'j');
+            g.Set(25, 5, '='); g.Set(25, 6, 'h');
+            // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
+            g.Set(16, 4, 'V'); g.Set(8, 10, 'D');
             // cau chuyen an
             g.Set(25, 14, 'L');
             g.Set(13, 12, '*');
@@ -132,6 +155,7 @@ namespace KTG
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Lina", Hair = new Color(0.6f, 0.3f, 0.15f), Skin = new Color(0.88f, 0.68f, 0.53f), Shirt = new Color(0.5f, 0.2f, 0.25f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Vance", Hair = new Color(0.1f, 0.1f, 0.12f), Skin = new Color(0.82f, 0.6f, 0.48f), Shirt = new Color(0.15f, 0.25f, 0.45f) };
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Chủ Quán Rowan", Hair = new Color(0.4f, 0.4f, 0.4f), Skin = new Color(0.86f, 0.66f, 0.5f), Shirt = new Color(0.4f, 0.3f, 0.2f) };
+            m.Npcs['D'] = new NpcDef { Code = 'D', Name = "Thợ Rèn Trẻ", Hair = new Color(0.3f, 0.22f, 0.15f), Skin = new Color(0.8f, 0.58f, 0.44f), Shirt = new Color(0.3f, 0.3f, 0.32f) };
             return m;
         }
 
@@ -159,8 +183,14 @@ namespace KTG
             // hang rao ben cang
             g.Set(3, 13, 'F'); g.Set(4, 13, 'F'); g.Set(23, 13, 'F'); g.Set(24, 13, 'F');
             g.Set(26, 7, 'n');
+            // them cay coi + bui co rim cong vien (xanh 'T' / hong 'Y')
+            g.Set(5, 1, 'T'); g.Set(22, 1, 'T');
+            g.Set(9, 1, 'Y'); g.Set(18, 1, 'Y');
+            g.Set(1, 3, 'u'); g.Set(26, 3, 'u'); g.Set(1, 12, 'u'); g.Set(26, 12, 'u');
             // cho canh gac ngan hang
             g.Set(16, 9, 'd');
+            // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
+            g.Set(10, 4, 'V'); g.Set(20, 9, 'D');
             // cau chuyen an
             g.Set(2, 14, 'L');
             g.Set(13, 12, '*');
@@ -189,6 +219,7 @@ namespace KTG
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Aurel", Hair = new Color(0.2f, 0.2f, 0.22f), Skin = new Color(0.8f, 0.6f, 0.48f), Shirt = new Color(0.15f, 0.35f, 0.15f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Sable", Hair = new Color(0.3f, 0.15f, 0.05f), Skin = new Color(0.6f, 0.42f, 0.3f), Shirt = new Color(0.5f, 0.35f, 0.1f) };
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Piu", Hair = new Color(0.15f, 0.15f, 0.15f), Skin = new Color(0.85f, 0.65f, 0.52f), Shirt = new Color(0.3f, 0.3f, 0.35f) };
+            m.Npcs['D'] = new NpcDef { Code = 'D', Name = "Nhân Viên Quầy", Hair = new Color(0.25f, 0.2f, 0.18f), Skin = new Color(0.78f, 0.58f, 0.46f), Shirt = new Color(0.2f, 0.25f, 0.35f) };
             return m;
         }
 
@@ -208,8 +239,14 @@ namespace KTG
             g.Set(8, 3, 'r'); g.Set(18, 3, 'r'); g.Set(3, 8, 'r'); g.Set(24, 8, 'r');
             // bui cay
             g.Set(10, 12, 'u'); g.Set(16, 12, 'u'); g.Set(2, 5, 'u'); g.Set(25, 5, 'u');
+            // them cay coi + bui co rim thung lung (xanh 'T' / hong 'Y' hop tong tim)
+            g.Set(9, 1, 'T'); g.Set(18, 1, 'T');
+            g.Set(5, 1, 'Y'); g.Set(22, 1, 'Y');
+            g.Set(1, 3, 'u'); g.Set(26, 3, 'u'); g.Set(1, 11, 'u'); g.Set(26, 11, 'u');
             // hang rao do nat cua khu dinh cu cu
             g.Set(6, 6, 'F'); g.Set(7, 6, 'F'); g.Set(20, 6, 'F'); g.Set(21, 6, 'F');
+            // dan lang di lai + 1 NPC tan gau (flavor, khong vao Flow)
+            g.Set(9, 9, 'V'); g.Set(18, 9, 'D');
             // cau chuyen an giau sau Nha Hien Triet
             g.Set(13, 2, 'L');
             g.Set(13, 12, '*');
@@ -238,6 +275,7 @@ namespace KTG
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Nhà Hiền Triết Mù", Hair = new Color(0.9f, 0.9f, 0.9f), Skin = new Color(0.75f, 0.58f, 0.48f), Shirt = new Color(0.6f, 0.5f, 0.7f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Mira", Hair = new Color(0.5f, 0.2f, 0.5f), Skin = new Color(0.85f, 0.68f, 0.6f), Shirt = new Color(0.4f, 0.2f, 0.5f) };
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Talos", Hair = new Color(0.25f, 0.2f, 0.3f), Skin = new Color(0.7f, 0.55f, 0.5f), Shirt = new Color(0.3f, 0.25f, 0.45f) };
+            m.Npcs['D'] = new NpcDef { Code = 'D', Name = "Lữ Khách Lạc Lối", Hair = new Color(0.4f, 0.35f, 0.45f), Skin = new Color(0.72f, 0.56f, 0.52f), Shirt = new Color(0.35f, 0.3f, 0.5f) };
             return m;
         }
 
@@ -257,6 +295,10 @@ namespace KTG
             g.Set(9, 11, 'F'); g.Set(10, 11, 'F'); g.Set(16, 11, 'F'); g.Set(17, 11, 'F');
             // thung hang cong nap
             g.Set(4, 11, 'b'); g.Set(22, 11, 'b');
+            // them cay coi + bui co hai ben san cung dien (xanh 'T' / hong 'Y')
+            g.Set(2, 2, 'T'); g.Set(25, 2, 'T');
+            g.Set(4, 2, 'Y'); g.Set(23, 2, 'Y');
+            g.Set(2, 6, 'u'); g.Set(25, 6, 'u'); g.Set(2, 9, 'u'); g.Set(25, 9, 'u');
             // linh gac
             g.Set(13, 10, 'A');
             // cau chuyen an trong goc cung dien
@@ -295,6 +337,33 @@ namespace KTG
                 case 2: return new Color(0.3f, 0.9f, 0.9f);
                 case 3: return new Color(0.8f, 0.4f, 0.9f);
                 default: return new Color(0.95f, 0.8f, 0.3f);
+            }
+        }
+
+        // Per-map ambient light — Phase B HD-2D (dùng bởi Lighting2D.AddGlobal):
+        // market ấm sáng · guild trung tính ám khói · bank lạnh xám-lam ·
+        // valley tím huyền ảo tối · palace lạnh trang nghiêm
+        public static Color MapAmbientColor(int mapIndex)
+        {
+            switch (mapIndex)
+            {
+                case 0: return new Color(1f, 0.96f, 0.88f);
+                case 1: return new Color(0.93f, 0.90f, 0.85f);
+                case 2: return new Color(0.80f, 0.86f, 1f);
+                case 3: return new Color(0.62f, 0.55f, 0.85f);
+                default: return new Color(0.78f, 0.82f, 1f);
+            }
+        }
+
+        public static float MapAmbientIntensity(int mapIndex)
+        {
+            switch (mapIndex)
+            {
+                case 0: return 1.0f;
+                case 1: return 0.9f;
+                case 2: return 0.85f;
+                case 3: return 0.7f;
+                default: return 0.78f;
             }
         }
 
@@ -393,6 +462,14 @@ namespace KTG
             {
                 Lines = new List<DialogueLine> { new DialogueLine("B", "Muối trắng tinh khiết đây, không đâu bán được đâu.") }
             };
+            FlavorDialogues[Key(0, 'D')] = new DialogueDef
+            {
+                Lines = new List<DialogueLine>
+                {
+                    new DialogueLine("D", "Bánh nóng đây, bánh nóng đây! Cô chú mua giùm con vài cái đi ạ."),
+                    new DialogueLine("D", "Chợ hôm nay đông vui thật, con thích nhất là lúc trời vừa hửng sáng.")
+                }
+            };
         }
 
         static void BuildMap1Dialogues()
@@ -460,6 +537,14 @@ namespace KTG
             FlavorDialogues[Key(1, 'C')] = new DialogueDef
             {
                 Lines = new List<DialogueLine> { new DialogueLine("C", "Quán trọ vẫn còn phòng trống nếu cháu cần nghỉ chân.") }
+            };
+            FlavorDialogues[Key(1, 'D')] = new DialogueDef
+            {
+                Lines = new List<DialogueLine>
+                {
+                    new DialogueLine("D", "Ta đang tập rèn một lưỡi rìu mới, còn vụng lắm."),
+                    new DialogueLine("D", "Thị trấn này dạo này nhộn nhịp hẳn lên nhờ Liên Minh Dệt.")
+                }
             };
         }
 
@@ -536,6 +621,14 @@ namespace KTG
             {
                 Lines = new List<DialogueLine> { new DialogueLine("C", "Ta còn phải ghi chép thêm nhiều sổ sách nữa.") }
             };
+            FlavorDialogues[Key(2, 'D')] = new DialogueDef
+            {
+                Lines = new List<DialogueLine>
+                {
+                    new DialogueLine("D", "Xin chào, quý khách cần đổi tiền hay gửi tiết kiệm ạ?"),
+                    new DialogueLine("D", "Ngân Thành lúc nào cũng đông đúc, ta ít khi được nghỉ tay.")
+                }
+            };
         }
 
         static void BuildMap3Dialogues()
@@ -599,6 +692,14 @@ namespace KTG
             FlavorDialogues[Key(3, 'C')] = new DialogueDef
             {
                 Lines = new List<DialogueLine> { new DialogueLine("C", "Sương mù ở đây thật kỳ lạ, phải không?") }
+            };
+            FlavorDialogues[Key(3, 'D')] = new DialogueDef
+            {
+                Lines = new List<DialogueLine>
+                {
+                    new DialogueLine("D", "Ta lạc vào đây đã lâu, chẳng nhớ nổi đường ra nữa."),
+                    new DialogueLine("D", "Cẩn thận, sương mù ở thung lũng này dễ khiến người ta nhầm lẫn.")
+                }
             };
         }
 
@@ -704,10 +805,8 @@ namespace KTG
                         Steps = new List<string>
                         {
                             "Nhiều xưởng dệt nhỏ cạnh tranh khốc liệt bằng giá và chất lượng",
-                            "Xưởng thắng thế tích lũy vốn và mở rộng quy mô",
                             "Các xưởng yếu dần bị thâu tóm hoặc sáp nhập",
-                            "Liên minh dệt lớn hình thành, kiểm soát phần lớn thị trường",
-                            "Cạnh tranh không mất đi mà chuyển sang hình thức mới giữa các liên minh"
+                            "Liên minh dệt lớn hình thành, kiểm soát phần lớn thị trường"
                         }
                     };
                 case 2:
@@ -722,9 +821,7 @@ namespace KTG
                             new PuzzleItem("Ngân hàng nắm cổ phần và cử người vào hội đồng quản trị xưởng sản xuất", "Tư bản tài chính"),
                             new PuzzleItem("Thương nhân mang vốn sang Quần Đảo Gió đầu tư xưởng đóng tàu", "Xuất khẩu tư bản"),
                             new PuzzleItem("Bốn thương hội họp kín, chia nhau từng vùng biển buôn bán", "Phân chia thị trường"),
-                            new PuzzleItem("Vốn ngân hàng và vốn sản xuất kết hợp thành một khối quyền lực", "Tư bản tài chính"),
-                            new PuzzleItem("Lợi nhuận đầu tư ở vùng đất khác cao hơn hẳn trong nước", "Xuất khẩu tư bản"),
-                            new PuzzleItem("Các bên cam kết không cạnh tranh trên địa bàn của nhau", "Phân chia thị trường")
+                            new PuzzleItem("Vốn ngân hàng và vốn sản xuất kết hợp thành một khối quyền lực", "Tư bản tài chính")
                         }
                     };
                 case 3:
@@ -750,23 +847,6 @@ namespace KTG
                                     "Chính xác — độc quyền sinh ra từ cạnh tranh, chỉ có thể điều tiết chứ không xóa bỏ hoàn toàn.",
                                     "Sai — xóa bỏ hoàn toàn là điều không tưởng vì nó sinh ra từ chính quy luật cạnh tranh.",
                                     "Sai — độc quyền vẫn có thể gây hại nếu không được kiểm soát."
-                                }
-                            },
-                            new QuizQuestion
-                            {
-                                Statement = "\"Cứ để thị trường tự do tuyệt đối, không cần ai can thiệp, mọi thứ sẽ tự tốt lên.\"",
-                                Options = new List<string>
-                                {
-                                    "Đúng, không cần Nhà nước can thiệp gì cả",
-                                    "Tự do tuyệt đối sẽ khiến kẻ mạnh chèn ép kẻ yếu, cần vai trò điều tiết của Nhà nước",
-                                    "Nhà nước nên kiểm soát toàn bộ giá cả mọi mặt hàng"
-                                },
-                                CorrectIndex = 1,
-                                Feedback = new List<string>
-                                {
-                                    "Sai — không điều tiết, độc quyền mới sẽ liên tục hình thành và chèn ép người yếu thế.",
-                                    "Chính xác — cần vai trò điều tiết của Nhà nước để bảo vệ cạnh tranh lành mạnh.",
-                                    "Sai — điều tiết không đồng nghĩa với kiểm soát tuyệt đối mọi thứ."
                                 }
                             },
                             new QuizQuestion
