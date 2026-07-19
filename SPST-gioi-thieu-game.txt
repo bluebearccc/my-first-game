@@ -1,0 +1,101 @@
+GIỚI THIỆU GAME "KINH TẾ GIỚI" (ECONIA) - TÀI LIỆU THUYẾT TRÌNH SPST
+========================================================================
+
+1. GAME LÀM VỀ CHỦ ĐỀ GÌ?
+------------------------------------------------------------------------
+"Kinh Tế Giới" (Econia) la game phieu luu 2D pixel-art giao duc, chu de
+Kinh te chinh tri Mac-Lenin, chuong Doc quyen va Chu nghia tu ban doc
+quyen (dung noi dung hoc phan Kinh te Chinh tri o Viet Nam).
+Slogan trong game: "Hanh trinh qua nam vung dat kinh te".
+
+Nguoi choi tinh day mat tri nho giua the gioi Econia - noi van hanh
+hoan toan bang quy luat kinh te - va phai di qua 5 vung dat, moi vung
+minh hoa mot khai niem trong ly luan ve doc quyen, de thu thap du 5
+Economic Crystal thi moi duoc ve nha:
+
+  1. Market of Many Hands (Cho)        -> Canh tranh
+     (nhieu sap giao khach -> giam gia, nang chat)
+  2. Guild Town (Thi tran Guild)       -> Tich tu, tap trung san xuat
+     -> hinh thanh doc quyen
+  3. Ngan Thanh - Bank of Interests    -> Tu ban tai chinh + xuat khau
+     tu ban
+  4. Valley of Market Illusions        -> Phan chia thi truong + dap
+     (Thung lung Ao anh)                 tan 2 ngo nhan cuc doan ve
+                                          thi truong
+  5. Palace of Regulation (Cung dien)  -> Vai tro dieu tiet cua Nha
+                                          nuoc - doi dau trum cuoi
+
+2. THONG DIEP CUA GAME
+------------------------------------------------------------------------
+Thong diep cot loi (nhat ky "Tong hop" cuoi game):
+
+  "Canh tranh sinh ra doc quyen, nhung doc quyen khong thu tieu canh
+  tranh ma lam no tro nen da dang va gay gat hon - day la quy luat
+  thong nhat va dau tranh khach quan. Nha nuoc, qua vai tro dieu tiet,
+  khong xoa bo quy luat nay ma dinh huong no de phat trien hai hoa
+  xa hoi."
+
+Game chu dong phan bac 2 ngo nhan cuc doan (diem nhan su pham hay de
+noi trong SPST):
+  - "Doc quyen luc nao cung xau, phai xoa bo hoan toan" -> SAI
+  - "Cu de thi truong tu do tuyet doi, khong can ai can thiep" -> SAI
+
+  => Thong diep: can DIEU TIET HOP LY, khong cuc doan theo huong nao -
+  gan voi dac trung kinh te thi truong dinh huong XHCN o Viet Nam.
+
+Ngoai ra con co lore an (da khac, chuyen bi mat) cung co them: nguon
+goc tien te, mat trai tu ban tai chinh, tu duy phan bien chong thao
+tung, va vong lap tu tai sinh cua doc quyen neu thieu dieu tiet - the
+hien qua qua khu trum cuoi Solandor.
+
+3. NHAN VAT
+------------------------------------------------------------------------
+Nhan vat chinh: nguoi choi - ke lac mat tri nho, hanh trinh kham pha
+va hoc hoi quy luat kinh te.
+
+NPC chinh theo tuyen truyen (moi map):
+
+  Cho (Market):
+    - Truong Cho          : dan chuyen
+    - Di Ba (sap rau)     : dai dien canh tranh
+    - Ong Muoi Trang       : doc quyen ban muoi
+
+  Guild Town:
+    - Lina                : tho det nho le
+    - Vance                : dau Lien Minh Det - tap trung tu ban
+    - Chu quan Rowan       : chu quan tro
+
+  Ngan Thanh (Bank):
+    - Aurel                : chu ngan hang - tu ban tai chinh
+    - Sable                : thuong nhan vien xu - xuat khau tu ban
+    - Piu                  : ky luc vien - phat hien phan chia thi
+                              truong
+
+  Thung lung Ao anh (Valley):
+    - Nha Hien Triet Mu    : dan chuyen
+    - Mira                 : tin "xoa bo doc quyen" (bi phan bien)
+    - Talos                : tin "tu do tuyet doi" (bi phan bien)
+
+  Cung dien (Palace):
+    - Linh Gac
+    - Solandor - "Vua Doc Quyen" (trum cuoi, dau bang cau hoi phan
+      bien thay vi danh nhau)
+
+NPC phu (flavor, khong anh huong cot truyen): Cau Be Ban Banh, Tho
+Ren Tre, Nhan Vien Quay, Lu Khach Lac Loi - cho the gioi song dong.
+
+Trang tri the gioi: dan lang di lai quanh pho, dong vat (ga, cho, bo,
+cuu, lon, meo), dong ruong - lam 5 vung dat "co hon" hon, khong phai
+chi de day ly thuyet kho khan.
+
+4. GIOI THIEU NGAN GON (DUNG DE NOI MO DAU SPST)
+------------------------------------------------------------------------
+"Kinh Te Gioi" la game phieu luu 2D pixel-art, bien chuong "Doc quyen
+va doc quyen nha nuoc" trong Kinh te Chinh tri Mac-Lenin thanh mot
+hanh trinh 5 vung dat - tu khu cho canh tranh, thi tran tap trung tu
+ban, ngan hang tu ban tai chinh, thung lung pha ngo nhan thi truong,
+den cung dien doi dau "Vua Doc Quyen". Toan bo do hoa duoc ve 100%
+bang code (procedural pixel-art), khong dung asset ngoai. Nguoi choi
+vua kham pha, vua tra loi cau hoi phan bien qua tung NPC de rut ra bai
+hoc: canh tranh va doc quyen la hai mat thong nhat-dau tranh, va vai
+tro dieu tiet cua Nha nuoc la chia khoa can bang.
