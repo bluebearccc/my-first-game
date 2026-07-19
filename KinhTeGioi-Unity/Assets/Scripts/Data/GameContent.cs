@@ -785,10 +785,8 @@ namespace KTG
                         Steps = new List<string>
                         {
                             "Nhiều xưởng dệt nhỏ cạnh tranh khốc liệt bằng giá và chất lượng",
-                            "Xưởng thắng thế tích lũy vốn và mở rộng quy mô",
                             "Các xưởng yếu dần bị thâu tóm hoặc sáp nhập",
-                            "Liên minh dệt lớn hình thành, kiểm soát phần lớn thị trường",
-                            "Cạnh tranh không mất đi mà chuyển sang hình thức mới giữa các liên minh"
+                            "Liên minh dệt lớn hình thành, kiểm soát phần lớn thị trường"
                         }
                     };
                 case 2:
@@ -803,9 +801,7 @@ namespace KTG
                             new PuzzleItem("Ngân hàng nắm cổ phần và cử người vào hội đồng quản trị xưởng sản xuất", "Tư bản tài chính"),
                             new PuzzleItem("Thương nhân mang vốn sang Quần Đảo Gió đầu tư xưởng đóng tàu", "Xuất khẩu tư bản"),
                             new PuzzleItem("Bốn thương hội họp kín, chia nhau từng vùng biển buôn bán", "Phân chia thị trường"),
-                            new PuzzleItem("Vốn ngân hàng và vốn sản xuất kết hợp thành một khối quyền lực", "Tư bản tài chính"),
-                            new PuzzleItem("Lợi nhuận đầu tư ở vùng đất khác cao hơn hẳn trong nước", "Xuất khẩu tư bản"),
-                            new PuzzleItem("Các bên cam kết không cạnh tranh trên địa bàn của nhau", "Phân chia thị trường")
+                            new PuzzleItem("Vốn ngân hàng và vốn sản xuất kết hợp thành một khối quyền lực", "Tư bản tài chính")
                         }
                     };
                 case 3:
@@ -831,23 +827,6 @@ namespace KTG
                                     "Chính xác — độc quyền sinh ra từ cạnh tranh, chỉ có thể điều tiết chứ không xóa bỏ hoàn toàn.",
                                     "Sai — xóa bỏ hoàn toàn là điều không tưởng vì nó sinh ra từ chính quy luật cạnh tranh.",
                                     "Sai — độc quyền vẫn có thể gây hại nếu không được kiểm soát."
-                                }
-                            },
-                            new QuizQuestion
-                            {
-                                Statement = "\"Cứ để thị trường tự do tuyệt đối, không cần ai can thiệp, mọi thứ sẽ tự tốt lên.\"",
-                                Options = new List<string>
-                                {
-                                    "Đúng, không cần Nhà nước can thiệp gì cả",
-                                    "Tự do tuyệt đối sẽ khiến kẻ mạnh chèn ép kẻ yếu, cần vai trò điều tiết của Nhà nước",
-                                    "Nhà nước nên kiểm soát toàn bộ giá cả mọi mặt hàng"
-                                },
-                                CorrectIndex = 1,
-                                Feedback = new List<string>
-                                {
-                                    "Sai — không điều tiết, độc quyền mới sẽ liên tục hình thành và chèn ép người yếu thế.",
-                                    "Chính xác — cần vai trò điều tiết của Nhà nước để bảo vệ cạnh tranh lành mạnh.",
-                                    "Sai — điều tiết không đồng nghĩa với kiểm soát tuyệt đối mọi thứ."
                                 }
                             },
                             new QuizQuestion
