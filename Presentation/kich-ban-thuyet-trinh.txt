@@ -1,0 +1,62 @@
+KỊCH BẢN THUYẾT TRÌNH — KINH TẾ GIỚI (ECONIA)
+Thời lượng: ~5 phút | 8 slide
+================================================================
+
+[SLIDE 1 — BÌA] (0:00–0:15)
+"Kính chào thầy/cô và các bạn. Nhóm em xin giới thiệu Kinh Tế Giới —
+một game phiêu lưu 2D biến chương Độc quyền và CNTB độc quyền thành
+một hành trình có thể chơi được."
+
+[SLIDE 2 — VẤN ĐỀ & Ý TƯỞNG] (0:15–0:40)
+"Chương độc quyền có một chuỗi logic khá trừu tượng: cạnh tranh dẫn
+tới tích tụ, tích tụ dẫn tới độc quyền, rồi Nhà nước phải điều tiết.
+Thay vì học thuộc chuỗi này, nhóm em muốn người chơi 'đi qua' từng
+bước của nó."
+
+[SLIDE 3 — TỔNG QUAN GAME] (0:40–1:10)
+"Người chơi vào vai một nhân vật mất trí nhớ, tỉnh dậy ở thế giới
+Econia — nơi mọi thứ vận hành bằng quy luật kinh tế. Mục tiêu: đi
+qua 5 vùng đất, thu thập đủ 5 Economic Crystal để tìm đường về nhà.
+Mỗi Crystal tương ứng một khái niệm lý luận đã được 'giải mã'."
+
+[SLIDE 4 — BẢN ĐỒ 5 VÙNG ĐẤT] (1:10–2:50, ~20s/vùng)
+- "Vùng 1, Chợ Muôn Bàn Tay — các sạp hàng giành khách bằng giá và
+  chất lượng, minh họa bản chất cạnh tranh."
+- "Vùng 2, Thị Trấn Guild — xưởng nhỏ bị thâu tóm, liên minh lớn
+  hình thành: đây là bước tích tụ, tập trung sản xuất dẫn tới độc
+  quyền."
+- "Vùng 3, Ngân Thành — vốn ngân hàng hợp với vốn sản xuất, dòng
+  vốn chảy ra hải ngoại: tư bản tài chính và xuất khẩu tư bản."
+- "Vùng 4, Thung Lũng Ảo Ảnh — người chơi phải bắt lỗi hai ngộ
+  nhận cực đoan về thị trường."
+- "Vùng 5, Cung Điện Điều Tiết — đối đầu cuối với Vua Độc Quyền
+  Solandor, thắng bằng lập luận chứ không bằng vũ lực, đại diện
+  cho vai trò điều tiết của Nhà nước."
+
+[SLIDE 5 — LỐI CHƠI] (2:50–3:20)
+"Người chơi học qua hội thoại và câu đố phản biện ở các bệ đá cổ —
+phân loại tình huống, sắp trình tự, bắt lỗi ngộ nhận. Trận boss
+cuối là một cuộc tranh luận, không phải đánh nhau — ẩn dụ cho việc
+vượt qua độc quyền bằng nhận thức."
+
+[SLIDE 6 — THÔNG ĐIỆP CỐT LÕI] (3:20–4:05)
+"Thông điệp xuyên suốt: cạnh tranh sinh ra độc quyền, nhưng độc
+quyền không thủ tiêu cạnh tranh mà làm nó đa dạng và gay gắt hơn.
+Game bác bỏ hai ngộ nhận: một, độc quyền lúc nào cũng xấu và phải
+xóa bỏ hoàn toàn; hai, cứ để thị trường tự do tuyệt đối không cần
+ai can thiệp. Cả hai đều sai."
+
+[SLIDE 7 — LIÊN HỆ THỰC TIỄN & KẾT LUẬN] (4:05–4:45)
+"Kết luận mà game hướng người chơi tới: cần điều tiết hợp lý — đây
+chính là tinh thần của kinh tế thị trường định hướng xã hội chủ
+nghĩa ở Việt Nam, nơi Nhà nước không xóa bỏ quy luật thị trường mà
+định hướng nó để phát triển hài hòa."
+
+[SLIDE 8 — CẢM ƠN / CTA] (4:45–5:00)
+"Đó là toàn bộ hành trình Kinh Tế Giới. Nhóm em có bản demo/tải
+game sẵn sàng nếu thầy/cô và các bạn muốn trải nghiệm. Xin cảm ơn,
+mời phần hỏi đáp."
+
+================================================================
+Ghi chú: điều hướng slide.html bằng phím mũi tên lên/xuống, hoặc
+bấm các chấm kim cương ở mép trái màn hình.
