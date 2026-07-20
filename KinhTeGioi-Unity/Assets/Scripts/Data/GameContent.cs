@@ -82,7 +82,7 @@ namespace KTG
                     "Đến bệ đá giữa chợ để giải đố",
                     "Đi tới cổng phía Đông để rời khỏi chợ"
                 },
-                RewardAction = "crystal;journal:canh_tranh;journal:doc_quyen;item:muoi_phep;toast:Bạn nhận được Viên Ngọc Chợ Búa!"
+                RewardAction = "crystal;stage+;journal:canh_tranh;journal:doc_quyen;item:muoi_phep;toast:Bạn nhận được Viên Ngọc Chợ Búa!"
             };
             m.Npcs['C'] = new NpcDef { Code = 'C', Name = "Trưởng Chợ", Hair = new Color(0.5f, 0.35f, 0.2f), Skin = new Color(0.85f, 0.65f, 0.5f), Shirt = new Color(0.7f, 0.45f, 0.15f) };
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Dì Ba", Hair = new Color(0.15f, 0.1f, 0.1f), Skin = new Color(0.9f, 0.7f, 0.55f), Shirt = new Color(0.3f, 0.6f, 0.35f) };
@@ -150,7 +150,7 @@ namespace KTG
                     "Đến bệ đá để sắp xếp lại chuỗi sự kiện",
                     "Rời Guild Town qua cổng phía Đông"
                 },
-                RewardAction = "crystal;journal:tich_tu_tap_trung;journal:hinh_thuc_moi;item:soi_det;toast:Bạn nhận được Viên Ngọc Guild Town!"
+                RewardAction = "crystal;stage+;journal:tich_tu_tap_trung;journal:hinh_thuc_moi;item:soi_det;toast:Bạn nhận được Viên Ngọc Guild Town!"
             };
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Lina", Hair = new Color(0.6f, 0.3f, 0.15f), Skin = new Color(0.88f, 0.68f, 0.53f), Shirt = new Color(0.5f, 0.2f, 0.25f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Vance", Hair = new Color(0.1f, 0.1f, 0.12f), Skin = new Color(0.82f, 0.6f, 0.48f), Shirt = new Color(0.15f, 0.25f, 0.45f) };
@@ -214,7 +214,7 @@ namespace KTG
                     "Đến bệ đá để phân loại các biểu hiện của độc quyền",
                     "Rời Ngân Thành qua cổng phía Đông"
                 },
-                RewardAction = "crystal;journal:tu_ban_tai_chinh;journal:xuat_khau_tu_ban;journal:phan_chia_thi_truong;item:so_ghi_chep;toast:Bạn nhận được Viên Ngọc Ngân Thành!"
+                RewardAction = "crystal;stage+;journal:tu_ban_tai_chinh;journal:xuat_khau_tu_ban;journal:phan_chia_thi_truong;item:so_ghi_chep;toast:Bạn nhận được Viên Ngọc Ngân Thành!"
             };
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Aurel", Hair = new Color(0.2f, 0.2f, 0.22f), Skin = new Color(0.8f, 0.6f, 0.48f), Shirt = new Color(0.15f, 0.35f, 0.15f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Sable", Hair = new Color(0.3f, 0.15f, 0.05f), Skin = new Color(0.6f, 0.42f, 0.3f), Shirt = new Color(0.5f, 0.35f, 0.1f) };
@@ -270,7 +270,7 @@ namespace KTG
                     "Đến bệ đá để bắt lỗi các ngộ nhận",
                     "Rời thung lũng qua cổng phía Đông, tiến vào Cung Điện"
                 },
-                RewardAction = "crystal;journal:dieu_tiet_nha_nuoc;journal:ngo_nhan_thi_truong;item:kinh_soi;toast:Bạn nhận được Viên Ngọc Ảo Ảnh!"
+                RewardAction = "crystal;stage+;journal:dieu_tiet_nha_nuoc;journal:ngo_nhan_thi_truong;item:kinh_soi;toast:Bạn nhận được Viên Ngọc Ảo Ảnh!"
             };
             m.Npcs['A'] = new NpcDef { Code = 'A', Name = "Nhà Hiền Triết Mù", Hair = new Color(0.9f, 0.9f, 0.9f), Skin = new Color(0.75f, 0.58f, 0.48f), Shirt = new Color(0.6f, 0.5f, 0.7f) };
             m.Npcs['B'] = new NpcDef { Code = 'B', Name = "Mira", Hair = new Color(0.5f, 0.2f, 0.5f), Skin = new Color(0.85f, 0.68f, 0.6f), Shirt = new Color(0.4f, 0.2f, 0.5f) };

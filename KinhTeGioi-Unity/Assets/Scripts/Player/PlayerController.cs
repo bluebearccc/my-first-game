@@ -118,6 +118,16 @@ namespace KTG
         void TryInteract()
         {
             Vector3 cellCenter = transform.position + new Vector3(0f, 0.5f, 0f);
+
+            // Uu tien o dang dung (vd: dang dung tren cong dich chuyen o rim ban do,
+            // noi o "phia truoc mat" co the nam ngoai ban do nen khong co Interactable).
+            var standCell = MapBuilder.WorldToCell(cellCenter);
+            if (MapBuilder.Interactables.TryGetValue(standCell, out var standInfo))
+            {
+                GameManager.Instance.Interact(standInfo.Kind, standInfo.Code);
+                return;
+            }
+
             Vector3 checkPos = cellCenter + new Vector3(Facing.x, Facing.y, 0f);
             var cell = MapBuilder.WorldToCell(checkPos);
             if (MapBuilder.Interactables.TryGetValue(cell, out var info))
