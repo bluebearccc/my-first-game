@@ -182,11 +182,22 @@
     font-size:.82rem;color:var(--muted)}
   .meta-row b{color:var(--ink)}
   .qa{margin-top:36px;font-family:var(--font-journal);font-style:italic;color:var(--gold-soft);font-size:1.15rem}
+  .thanks-grid{display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center}
+  .qr-card{--n:10px;background:#fdfaf0;border:1px solid var(--gold-strong);
+    padding:20px 22px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;width:240px}
+  .qr-card img{width:160px;height:160px}
+  .qr-card .qr-cap{font-family:var(--font-hud);font-size:.7rem;letter-spacing:.14em;
+    text-transform:uppercase;color:#6b5a1f;text-align:center}
+  .qr-card .qr-url{display:block;font-family:var(--font-hud);font-size:1rem;font-weight:700;color:#8a7a3f;
+    letter-spacing:.01em;overflow-wrap:break-word;text-align:center;text-decoration:none}
+  .qr-card .qr-url:hover{color:#6b5a1f;text-decoration:underline}
 
   @media(max-width:820px){
     .slide{padding:70px 6vw 48px}
     .lore,.play{grid-template-columns:1fr;gap:28px}
     .play .order-thumb{order:-1}
+    .thanks-grid{grid-template-columns:1fr;gap:32px}
+    .qr-card{justify-self:start}
   }
 </style>
 </head>
@@ -353,22 +364,29 @@
   </section>
 
   <section class="slide" id="s8">
-    <div class="slide-in thanks">
-      <span class="kicker">Cảm ơn</span>
-      <h2>Xin cảm ơn — mời trải nghiệm Kinh Tế Giới</h2>
-      <div class="meta-row">
-        <span><b>Nền tảng:</b> Windows 64-bit</span>
-        <span><b>Dung lượng:</b> ~72 MB</span>
-        <span><b>Engine:</b> Unity · URP</span>
+    <div class="slide-in thanks thanks-grid">
+      <div>
+        <span class="kicker">Cảm ơn</span>
+        <h2>Xin cảm ơn — mời trải nghiệm Kinh Tế Giới</h2>
+        <div class="meta-row">
+          <span><b>Nền tảng:</b> Windows 64-bit</span>
+          <span><b>Dung lượng:</b> ~72 MB</span>
+          <span><b>Engine:</b> Unity · URP</span>
+        </div>
+        <div class="keys">
+          <div class="key"><kbd>WASD</kbd> Di chuyển</div>
+          <div class="key"><kbd>E</kbd> Tương tác</div>
+          <div class="key"><kbd>Q</kbd> Câu thoại trước</div>
+          <div class="key"><kbd>I</kbd> Túi đồ</div>
+          <div class="key"><kbd>J</kbd> Nhật ký</div>
+        </div>
+        <p class="qa">Mời thầy/cô và các bạn đặt câu hỏi.</p>
       </div>
-      <div class="keys">
-        <div class="key"><kbd>WASD</kbd> Di chuyển</div>
-        <div class="key"><kbd>E</kbd> Tương tác</div>
-        <div class="key"><kbd>Q</kbd> Câu thoại trước</div>
-        <div class="key"><kbd>I</kbd> Túi đồ</div>
-        <div class="key"><kbd>J</kbd> Nhật ký</div>
+      <div class="qr-card frame-notched">
+        <img src="data:image/png;base64,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" alt="QR code chơi Kinh Tế Giới trên trình duyệt">
+        <p class="qr-cap">Quét để chơi ngay</p>
+        <a class="qr-url" href="https://my-first-game-ruddy.vercel.app/" target="_blank" rel="noopener">my-first-game-ruddy.vercel.app</a>
       </div>
-      <p class="qa">Mời thầy/cô và các bạn đặt câu hỏi.</p>
     </div>
   </section>
 
